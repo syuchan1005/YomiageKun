@@ -184,7 +184,7 @@ public class StudyMain {
 	public String replace(String user, String text) {
 		user = user.toUpperCase();
 		text = text.toUpperCase();
-		text = text.replaceAll("HTTPS*:\\/\\/.*[ ]", "URL省略");
+		text = text.replaceAll("HTTPS*:\\/\\/.*", "URL省略");
 		for (StudyContent studyContent : studyContentList) {
 			user = user.replaceAll(Pattern.quote(studyContent.getBeforeText()), studyContent.afterText);
 		}

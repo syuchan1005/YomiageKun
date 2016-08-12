@@ -12,6 +12,7 @@ import com.samczsun.skype4j.exceptions.ConnectionException;
 import com.samczsun.skype4j.exceptions.SkypeException;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
@@ -33,8 +34,14 @@ public class SkypeMain {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkypeSetting account = SkypeSetting.getInstance();
-				skype = new SkypeBuilder(account.getSkypeUser(), account.getSkypePass())
-						.withAllResources().build();
+				String skypeUser = account.getSkypeUser();
+				String skypePass = account.getSkypePass();
+				if (skypeUser == null || skypeUser.length() == 0||
+						skypePass == null || skypePass.length() == 0) {
+					JOptionPane.showMessageDialog(((Component) e.getSource()), "UserNameかPassWordが足りません.\nSetting->Skypeより入力してください");
+					return;
+				}
+				skype = new SkypeBuilder(skypeUser, skypePass).withAllResources().build();
 				try {
 					skype.login();
 					skype.getEventDispatcher().registerListener(new MessageReceived());
@@ -45,7 +52,7 @@ public class SkypeMain {
 				}
 				lunchButton.setEnabled(false);
 				stopButton.setEnabled(true);
-				skypeSpeech("Skype読み上げが起動しました");
+				skypeSpeech("", "Skype読み上げが起動しました");
 			}
 		});
 		stopButton.addActionListener(new ActionListener() {
@@ -92,15 +99,14 @@ public class SkypeMain {
 			String sender = e.getMessage().getSender().getDisplayName();
 			String text = e.getMessage().getContent().asPlaintext();
 			if (text.startsWith("\\")) return;
-			sender = StudyMain.getInstance().replace(sender, text);
-			skypeSpeech(sender);
+			skypeSpeech(sender, text);
 		}
 	}
 
-	public static void skypeSpeech(String text) {
+	public static void skypeSpeech(String sender, String text) {
 		JTextArea skypeLogTextArea = SkypeMain.getInstance().getSkypeLogTextArea();
-		skypeLogTextArea.append(text + "\n");
+		skypeLogTextArea.append(sender + ": " + text + "\n");
 		skypeLogTextArea.setCaretPosition(skypeLogTextArea.getText().length());
-		Speech.speakFemale(text);
+		Speech.speakFemale(StudyMain.getInstance().replace(sender, text));
 	}
 }
