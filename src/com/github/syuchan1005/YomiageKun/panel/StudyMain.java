@@ -182,7 +182,12 @@ public class StudyMain {
 	}
 
 	public String replace(String user, String text) {
-		text = text.replaceAll("https*:\\/\\/.*[ ]", "URL省略");
+		user = user.toUpperCase();
+		text = text.toUpperCase();
+		text = text.replaceAll("HTTPS*:\\/\\/.*[ ]", "URL省略");
+		for (StudyContent studyContent : studyContentList) {
+			user = user.replaceAll(Pattern.quote(studyContent.getBeforeText()), studyContent.afterText);
+		}
 		Matcher matcher = pattern.matcher(text);
 		if (matcher.find()) {
 			switch (matcher.group(1)) {

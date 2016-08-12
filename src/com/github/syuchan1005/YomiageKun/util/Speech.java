@@ -20,7 +20,7 @@ public class Speech extends Thread {
 	private static Speech speech;
 
 	static  {
-		AuthApiKey.initializeAuth("Your apikey here");
+		AuthApiKey.initializeAuth("Your APIKey Here!");
 		speech = new Speech();
 		speech.start();
 	}
@@ -65,7 +65,7 @@ public class Speech extends Thread {
 			try {
 				Thread.sleep(100);
 				byte[] bytes = queue.poll();
-				if (clip == null) continue;
+				if (bytes == null) continue;
 				clip.open(af, bytes, 0, bytes.length);
 				clip.start();
 				Thread.sleep(clip.getMicrosecondLength() / 1000);
