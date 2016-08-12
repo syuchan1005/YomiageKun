@@ -1,0 +1,208 @@
+package com.github.syuchan1005.YomiageKun.panel;
+
+import com.github.syuchan1005.YomiageKun.*;
+import com.github.syuchan1005.YomiageKun.tablemodel.StudyModel;
+import com.github.syuchan1005.YomiageKun.util.Util;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Created by syuchan on 2016/04/03.
+ */
+public class StudyMain {
+	private JPanel panel1;
+	private JButton AddButton;
+	private JButton DelButton;
+	private JTable studyTable;
+	private JTextField beforeField;
+	private JTextField afterField;
+	private JFormattedTextField priorityField;
+	private JScrollPane studyScrollPane;
+	private JButton bouyomiButton;
+
+	private static JFileChooser jFileChooser = new JFileChooser();
+	private static StudyMain studyMain;
+	private static StudyModel studyModel;
+	private static List<StudyContent> studyContentList;
+	private static Pattern pattern = Pattern.compile("(教育|忘却)\\((.*)\\)");
+
+	private StudyMain() {
+		studyContentList = new ArrayList<>();
+		this.studyTable.getTableHeader().setReorderingAllowed(false);
+		this.setTableModel();
+		this.setButtonListener();
+	}
+
+	public static StudyMain getInstance() {
+		if (studyMain == null) studyMain = new StudyMain();
+		return studyMain;
+	}
+
+	public static JPanel getPanel() {
+		return getInstance().panel1;
+	}
+
+	public void setTableModel() {
+		studyModel = new StudyModel();
+		this.studyTable.setModel(studyModel);
+	}
+
+	public void setButtonListener() {
+		AddButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (beforeField.getText().length() <= 0 | afterField.getText().length() <= 0 | !Util.isInt(priorityField.getText())) return;
+				addListData(beforeField.getText(), afterField.getText(), Integer.parseInt(priorityField.getText()));
+			}
+		});
+		DelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int[] rows = studyTable.getSelectedRows();
+				for (int i = rows.length - 1; i > -1; i--) {
+					studyModel.removeRow(rows[i]);
+					studyContentList.remove(rows[i]);
+				}
+				sort();
+			}
+		});
+		bouyomiButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jFileChooser.showOpenDialog(((Component) e.getSource()));
+				if (jFileChooser.getFileSelectionMode() != JFileChooser.APPROVE_OPTION) return;
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(jFileChooser.getSelectedFile()));
+					List<StudyMain.StudyContent> studyContentList = StudyMain.getStudyContentList();
+					String line;
+					while ((line = br.readLine()) != null) {
+						String[] split = line.split("\t");
+						if (split.length != 4) continue;
+						studyContentList.add(new StudyMain.StudyContent(split[2], split[3], Integer.parseInt(split[0])));
+					}
+					StudyMain.getInstance().sort();
+				} catch (IOException e1) {
+				}
+			}
+		});
+	}
+
+	public void addListData(String before, String after, int priority) {
+		before = before.toUpperCase();
+		removeListData(before);
+		studyContentList.add(new StudyContent(before, after, Integer.valueOf(priority)));
+		studyModel.addRow(new Object[]{ before, after, Integer.valueOf(priority) });
+		sort();
+	}
+
+	public void removeListData(String before) {
+		before = before.toUpperCase();
+		if (studyContentList.size() == 0) return;
+		for (int i = studyContentList.size() - 1; i > -1; i--) {
+			if (studyContentList.get(i).getBeforeText().equals(before)) {
+				studyModel.removeRow(i);
+				studyContentList.remove(i);
+				break;
+			}
+		}
+		sort();
+	}
+
+	public void sort() {
+		Collections.sort(studyContentList, new Comparator<StudyContent>() {
+			@Override
+			public int compare(StudyContent s1, StudyContent s2) {
+				int priority = s2.getPriority() - s1.getPriority();
+				if (priority == 0) return s1.getBeforeText().compareTo(s2.getBeforeText());
+				return priority;
+			}
+		});
+		if (studyModel.getRowCount() != 0) {
+			for (int i = studyModel.getRowCount() - 1; i > -1; i--) {
+				studyModel.removeRow(i);
+			}
+		}
+		for (StudyContent s : studyContentList) {
+			studyModel.addRow(new Object[]{s.getBeforeText(), s.getAfterText(), s.getPriority()});
+		}
+	}
+
+	public static class StudyContent {
+		private String beforeText;
+		private String afterText;
+		private int priority;
+
+		public StudyContent(String beforeText, String afterText, int priority) {
+			this.beforeText = beforeText;
+			this.afterText = afterText;
+			this.priority = priority;
+		}
+
+		public String getBeforeText() {
+			return beforeText;
+		}
+
+		public void setBeforeText(String beforeText) {
+			this.beforeText = beforeText;
+		}
+
+		public String getAfterText() {
+			return afterText;
+		}
+
+		public void setAfterText(String afterText) {
+			this.afterText = afterText;
+		}
+
+		public int getPriority() {
+			return priority;
+		}
+
+		public void setPriority(int priority) {
+			this.priority = priority;
+		}
+	}
+
+	public static List<StudyContent> getStudyContentList() {
+		return studyContentList;
+	}
+
+	public String replace(String user, String text) {
+		text = text.replaceAll("https*:\\/\\/.*[ ]", "URL省略");
+		Matcher matcher = pattern.matcher(text);
+		if (matcher.find()) {
+			switch (matcher.group(1)) {
+				case "教育":
+					String[] split = matcher.group(2).split("=");
+					if (split.length != 2) break;
+					addListData(split[0], split[1], 0);
+					return user + " " + split[0] + "を" + split[1] + "と覚えました";
+				case "忘却":
+					removeListData(matcher.group(2));
+					return user + " " + matcher.group(2) + "を忘れました";
+			}
+		}
+		for (StudyContent studyContent : studyContentList) {
+			text = text.replaceAll(Pattern.quote(studyContent.getBeforeText()), studyContent.afterText);
+		}
+		return user + " " + text;
+	}
+
+	private void createUIComponents() {
+		this.priorityField = new JFormattedTextField(NumberFormat.getIntegerInstance());
+	}
+}
