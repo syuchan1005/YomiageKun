@@ -20,7 +20,7 @@ public class Speech extends Thread {
 	private static Speech speech;
 
 	static  {
-		AuthApiKey.initializeAuth("376a47742f574c6f685144476c6d4552786b424656644833312e325573394f562f58636272304945644131");
+		AuthApiKey.initializeAuth("Your API Key Here");
 		speech = new Speech();
 		speech.start();
 	}
