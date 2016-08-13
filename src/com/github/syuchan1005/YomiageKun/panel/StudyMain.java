@@ -33,6 +33,8 @@ public class StudyMain {
 	private JFormattedTextField priorityField;
 	private JScrollPane studyScrollPane;
 	private JButton bouyomiButton;
+	private JButton bouyomiRegButton;
+	private JTextField isRegField;
 
 	private static JFileChooser jFileChooser = new JFileChooser();
 	private static StudyMain studyMain;
@@ -65,8 +67,12 @@ public class StudyMain {
 		AddButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (beforeField.getText().length() <= 0 | afterField.getText().length() <= 0 | !Util.isInt(priorityField.getText())) return;
-				addListData(beforeField.getText(), afterField.getText(), Integer.parseInt(priorityField.getText()));
+				if (beforeField.getText().length() <= 0 ||
+						afterField.getText().length() <= 0 ||
+						!Util.isInt(priorityField.getText()) ||
+						isRegField.getText().length() <= 0) return;
+				addListData(beforeField.getText(), afterField.getText(),
+						Integer.parseInt(priorityField.getText()), Boolean.parseBoolean(isRegField.getText()));
 			}
 		});
 		DelButton.addActionListener(new ActionListener() {
@@ -92,7 +98,26 @@ public class StudyMain {
 					while ((line = br.readLine()) != null) {
 						String[] split = line.split("\t");
 						if (split.length != 4) continue;
-						studyContentList.add(new StudyMain.StudyContent(split[2], split[3], Integer.parseInt(split[0])));
+						studyContentList.add(new StudyMain.StudyContent(split[2], split[3], Integer.parseInt(split[0]), false));
+					}
+					StudyMain.getInstance().sort();
+				} catch (IOException e1) {
+				}
+			}
+		});
+		bouyomiRegButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jFileChooser.showOpenDialog(((Component) e.getSource()));
+				if (jFileChooser.getFileSelectionMode() != JFileChooser.APPROVE_OPTION) return;
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(jFileChooser.getSelectedFile()));
+					List<StudyMain.StudyContent> studyContentList = StudyMain.getStudyContentList();
+					String line;
+					while ((line = br.readLine()) != null) {
+						String[] split = line.split("\t");
+						if (split.length != 4) continue;
+						studyContentList.add(new StudyMain.StudyContent(split[2], split[3], Integer.parseInt(split[0]), true));
 					}
 					StudyMain.getInstance().sort();
 				} catch (IOException e1) {
@@ -101,11 +126,11 @@ public class StudyMain {
 		});
 	}
 
-	public void addListData(String before, String after, int priority) {
-		before = before.toUpperCase();
+	public void addListData(String before, String after, int priority, boolean isReg) {
+		if (!isReg) before = before.toUpperCase();
 		removeListData(before);
-		studyContentList.add(new StudyContent(before, after, Integer.valueOf(priority)));
-		studyModel.addRow(new Object[]{ before, after, Integer.valueOf(priority) });
+		studyContentList.add(new StudyContent(before, after, Integer.valueOf(priority), isReg));
+		studyModel.addRow(new Object[]{ before, after, Integer.valueOf(priority), isReg });
 		sort();
 	}
 
@@ -137,7 +162,7 @@ public class StudyMain {
 			}
 		}
 		for (StudyContent s : studyContentList) {
-			studyModel.addRow(new Object[]{s.getBeforeText(), s.getAfterText(), s.getPriority()});
+			studyModel.addRow(new Object[]{s.getBeforeText(), s.getAfterText(), s.getPriority(), s.isReg()});
 		}
 	}
 
@@ -145,11 +170,13 @@ public class StudyMain {
 		private String beforeText;
 		private String afterText;
 		private int priority;
+		private boolean isReg;
 
-		public StudyContent(String beforeText, String afterText, int priority) {
+		public StudyContent(String beforeText, String afterText, int priority, boolean isReg) {
 			this.beforeText = beforeText;
 			this.afterText = afterText;
 			this.priority = priority;
+			this.isReg = isReg;
 		}
 
 		public String getBeforeText() {
@@ -175,6 +202,14 @@ public class StudyMain {
 		public void setPriority(int priority) {
 			this.priority = priority;
 		}
+
+		public boolean isReg() {
+			return isReg;
+		}
+
+		public void setReg(boolean reg) {
+			isReg = reg;
+		}
 	}
 
 	public static List<StudyContent> getStudyContentList() {
@@ -183,26 +218,40 @@ public class StudyMain {
 
 	public String replace(String user, String text) {
 		user = user.toUpperCase();
-		text = text.toUpperCase();
-		text = text.replaceAll("HTTPS*:\\/\\/.*", "URL省略");
 		for (StudyContent studyContent : studyContentList) {
-			user = user.replaceAll(Pattern.quote(studyContent.getBeforeText()), studyContent.afterText);
+			String beforeText = studyContent.getBeforeText();
+			if (!studyContent.isReg()) beforeText = Pattern.quote(beforeText);
+			user = user.replaceAll(beforeText, studyContent.afterText);
 		}
 		Matcher matcher = pattern.matcher(text);
 		if (matcher.find()) {
 			switch (matcher.group(1)) {
 				case "教育":
-					String[] split = matcher.group(2).split("=");
+					String group = matcher.group(2);
+					boolean isReg = false;
+					if (group.indexOf("==") != -1) {
+						group = group.replace("==", "=");
+					} else if (group.indexOf("=R") != -1) {
+						isReg = true;
+						group = group.replace("=R", "=");
+					} else {
+						break;
+					}
+					String[] split = group.split("=");
 					if (split.length != 2) break;
-					addListData(split[0], split[1], 0);
-					return user + " " + split[0] + "を" + split[1] + "と覚えました";
+					addListData(split[0], split[1], 0, isReg);
+					return user + " " + split[0] + (isReg ? "を正規表現で" : "を") + split[1] + "と覚えました";
 				case "忘却":
 					removeListData(matcher.group(2));
 					return user + " " + matcher.group(2) + "を忘れました";
 			}
 		}
+		text = text.toUpperCase();
+		text = text.replaceAll("HTTPS?:\\/\\/.*", "URL省略");
 		for (StudyContent studyContent : studyContentList) {
-			text = text.replaceAll(Pattern.quote(studyContent.getBeforeText()), studyContent.afterText);
+			String beforeText = studyContent.getBeforeText();
+			if (!studyContent.isReg()) beforeText = Pattern.quote(beforeText);
+			text = text.replaceAll(beforeText, studyContent.afterText);
 		}
 		return user + " " + text;
 	}

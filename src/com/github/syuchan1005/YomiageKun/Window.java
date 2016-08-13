@@ -39,7 +39,7 @@ public class Window extends JFrame {
 	public void setFrameData() {
 		this.setTitle("読み上げ君");
 		this.setIconImage(Util.getImageIcon(this, "resources/icon.png"));
-		this.setSize(600, 400);
+		this.setSize(800, 500);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -57,8 +57,12 @@ public class Window extends JFrame {
 					String line;
 					while ((line = br.readLine()) != null) {
 						String[] split = line.split("\t");
-						if (split.length != 3) continue;
-						studyContentList.add(new StudyMain.StudyContent(split[0], split[1], Integer.parseInt(split[2])));
+						if (split.length < 3) continue;
+						if (split.length == 3) {
+							studyContentList.add(new StudyMain.StudyContent(split[0], split[1], Integer.parseInt(split[2]), false));
+						} else if (split.length == 4) {
+							studyContentList.add(new StudyMain.StudyContent(split[0], split[1], Integer.parseInt(split[2]), Boolean.parseBoolean(split[3])));
+						}
 					}
 					StudyMain.getInstance().sort();
 				} catch (IOException e1) {
@@ -74,7 +78,8 @@ public class Window extends JFrame {
 					for (StudyMain.StudyContent studyContent : StudyMain.getStudyContentList()) {
 						String s = studyContent.getBeforeText() +
 								"\t" + studyContent.getAfterText() +
-								"\t" + studyContent.getPriority();
+								"\t" + studyContent.getPriority() +
+								"\t" + studyContent.isReg();
 						pw.println(s);
 					}
 					pw.close();

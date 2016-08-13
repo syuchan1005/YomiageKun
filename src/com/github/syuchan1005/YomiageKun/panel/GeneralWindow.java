@@ -14,6 +14,7 @@ public class GeneralWindow {
 	private JPanel mainPanel;
 	private JButton speechTestButton;
 	private JTextField speechText;
+	private JCheckBox debugModeCheckBox;
 
 	private GeneralWindow() {
 		speechTestButton.addActionListener(new ActionListener() {
@@ -26,5 +27,13 @@ public class GeneralWindow {
 
 	public static JPanel getPanel() {
 		return generalWindow.mainPanel;
+	}
+
+	public static GeneralWindow getInstance() {
+		return generalWindow;
+	}
+
+	public boolean isDebugMode() {
+		return debugModeCheckBox.isSelected();
 	}
 }

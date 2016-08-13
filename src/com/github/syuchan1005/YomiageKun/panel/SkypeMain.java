@@ -105,8 +105,11 @@ public class SkypeMain {
 
 	public static void skypeSpeech(String sender, String text) {
 		JTextArea skypeLogTextArea = SkypeMain.getInstance().getSkypeLogTextArea();
-		skypeLogTextArea.append(sender + ": " + text + "\n");
+		skypeLogTextArea.append(sender + ": " + text);
+		String rep = StudyMain.getInstance().replace(sender, text);
+		if (GeneralWindow.getInstance().isDebugMode()) skypeLogTextArea.append("(" + rep + ")");
+		skypeLogTextArea.append("\n");
 		skypeLogTextArea.setCaretPosition(skypeLogTextArea.getText().length());
-		Speech.speakFemale(StudyMain.getInstance().replace(sender, text));
+		Speech.speakFemale(rep);
 	}
 }
