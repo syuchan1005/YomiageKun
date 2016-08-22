@@ -7,7 +7,6 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +22,8 @@ public class SkypeSetting {
 		private JTextField skypeReadField;
 		private JComboBox skypeTypeComboBox;
 		private JTable skypeReadTable;
+	private JCheckBox storedPassCheckBox;
+	private JCheckBox storedUserCheckBox;
 
 	private static SkypeSetting skypeSetting;
 	private static SkypeModel skypeModel;
@@ -88,8 +89,20 @@ public class SkypeSetting {
 		return new String(skypePassField.getPassword());
 	}
 
+	public JCheckBox getStoredPassCheckBox() {
+		return storedPassCheckBox;
+	}
+
+	public JCheckBox getStoredUserCheckBox() {
+		return storedUserCheckBox;
+	}
+
 	public JTextField getSkypeUserField() {
 		return skypeUserField;
+	}
+
+	public JPasswordField getSkypePassField() {
+		return skypePassField;
 	}
 
 	public static Map<String, SkypeChatType> getSkypeReadMap() {

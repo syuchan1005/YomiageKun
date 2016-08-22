@@ -34,7 +34,7 @@ public class StudyMain {
 	private JScrollPane studyScrollPane;
 	private JButton bouyomiButton;
 	private JButton bouyomiRegButton;
-	private JTextField isRegField;
+	private JCheckBox isRegenCheckBox;
 
 	private static JFileChooser jFileChooser = new JFileChooser();
 	private static StudyMain studyMain;
@@ -69,10 +69,12 @@ public class StudyMain {
 			public void actionPerformed(ActionEvent e) {
 				if (beforeField.getText().length() <= 0 ||
 						afterField.getText().length() <= 0 ||
-						!Util.isInt(priorityField.getText()) ||
-						isRegField.getText().length() <= 0) return;
+						!Util.isInt(priorityField.getText())) return;
 				addListData(beforeField.getText(), afterField.getText(),
-						Integer.parseInt(priorityField.getText()), Boolean.parseBoolean(isRegField.getText()));
+						Integer.parseInt(priorityField.getText()), isRegenCheckBox.isSelected());
+				beforeField.setText("");
+				afterField.setText("");
+				priorityField.setText("");
 			}
 		});
 		DelButton.addActionListener(new ActionListener() {
@@ -80,7 +82,6 @@ public class StudyMain {
 			public void actionPerformed(ActionEvent e) {
 				int[] rows = studyTable.getSelectedRows();
 				for (int i = rows.length - 1; i > -1; i--) {
-					studyModel.removeRow(rows[i]);
 					studyContentList.remove(rows[i]);
 				}
 				sort();
@@ -130,7 +131,6 @@ public class StudyMain {
 		if (!isReg) before = before.toUpperCase();
 		removeListData(before);
 		studyContentList.add(new StudyContent(before, after, Integer.valueOf(priority), isReg));
-		studyModel.addRow(new Object[]{ before, after, Integer.valueOf(priority), isReg });
 		sort();
 	}
 
@@ -139,7 +139,6 @@ public class StudyMain {
 		if (studyContentList.size() == 0) return;
 		for (int i = studyContentList.size() - 1; i > -1; i--) {
 			if (studyContentList.get(i).getBeforeText().equals(before)) {
-				studyModel.removeRow(i);
 				studyContentList.remove(i);
 				break;
 			}
@@ -156,11 +155,7 @@ public class StudyMain {
 				return priority;
 			}
 		});
-		if (studyModel.getRowCount() != 0) {
-			for (int i = studyModel.getRowCount() - 1; i > -1; i--) {
-				studyModel.removeRow(i);
-			}
-		}
+		studyModel.removeAll();
 		for (StudyContent s : studyContentList) {
 			studyModel.addRow(new Object[]{s.getBeforeText(), s.getAfterText(), s.getPriority(), s.isReg()});
 		}
@@ -218,11 +213,7 @@ public class StudyMain {
 
 	public String replace(String user, String text) {
 		user = user.toUpperCase();
-		for (StudyContent studyContent : studyContentList) {
-			String beforeText = studyContent.getBeforeText();
-			if (!studyContent.isReg()) beforeText = Pattern.quote(beforeText);
-			user = user.replaceAll(beforeText, studyContent.afterText);
-		}
+		user = studyReplace(user);
 		Matcher matcher = pattern.matcher(text);
 		if (matcher.find()) {
 			switch (matcher.group(1)) {
@@ -234,11 +225,12 @@ public class StudyMain {
 					} else if (group.indexOf("=R") != -1) {
 						isReg = true;
 						group = group.replace("=R", "=");
-					} else {
+					} else if (group.indexOf("=") == -1) {
 						break;
 					}
 					String[] split = group.split("=");
 					if (split.length != 2) break;
+					if (split[0].length() == 0 || split[1].length() == 0) break;
 					addListData(split[0], split[1], 0, isReg);
 					return user + " " + split[0] + (isReg ? "を正規表現で" : "を") + split[1] + "と覚えました";
 				case "忘却":
@@ -248,12 +240,17 @@ public class StudyMain {
 		}
 		text = text.toUpperCase();
 		text = text.replaceAll("HTTPS?:\\/\\/.*", "URL省略");
+		text = studyReplace(text);
+		return user + " " + text;
+	}
+
+	private String studyReplace(String str) {
 		for (StudyContent studyContent : studyContentList) {
 			String beforeText = studyContent.getBeforeText();
 			if (!studyContent.isReg()) beforeText = Pattern.quote(beforeText);
-			text = text.replaceAll(beforeText, studyContent.afterText);
+			str = str.replaceAll(beforeText, studyContent.afterText);
 		}
-		return user + " " + text;
+		return str;
 	}
 
 	private void createUIComponents() {

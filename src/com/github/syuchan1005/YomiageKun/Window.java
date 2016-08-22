@@ -4,6 +4,7 @@ import com.github.syuchan1005.YomiageKun.panel.GeneralWindow;
 import com.github.syuchan1005.YomiageKun.panel.SkypeSetting;
 import com.github.syuchan1005.YomiageKun.panel.StudyMain;
 import com.github.syuchan1005.YomiageKun.panel.SkypeMain;
+import com.github.syuchan1005.YomiageKun.util.Speech;
 import com.github.syuchan1005.YomiageKun.util.Util;
 
 import javax.swing.JFrame;
@@ -12,13 +13,17 @@ import javax.swing.JTabbedPane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by syuchan on 2016/04/02.
  */
 public class Window extends JFrame {
+	private static Window window;
+	private Properties APIKeyProperties;
 	private JPanel panel1;
 		private JTabbedPane tabbedPane1;
 			private JPanel SkypeMainPanel;
@@ -27,13 +32,18 @@ public class Window extends JFrame {
 				private JPanel SkypeAccountPanel;
 	private JPanel GeneralPanel;
 
-	public Window() {
+	private Window() throws IOException {
+		APIKeyProperties = new Properties();
+		InputStream inputStream = this.getClass().getClassLoader().getResource("resources/APIKey.properties")
+				.openConnection().getInputStream();
+		APIKeyProperties.load(inputStream);
+		inputStream.close();
+		Speech.init(APIKeyProperties.getProperty("DocomoSpeechToText"));
 		this.setFrameComponent();
 		this.setFrameData();
 		this.setLocation(50, 50);
 		this.setWindowListener();
 		Util.setLookAndFeel(this);
-		this.setVisible(true);
 	}
 
 	public void setFrameData() {
@@ -95,13 +105,20 @@ public class Window extends JFrame {
 					BufferedReader br = new BufferedReader(new FileReader(new File("skype.txt")));
 					String line;
 					while ((line = br.readLine()) != null) {
+						SkypeSetting skypeSetting = SkypeSetting.getInstance();
 						if (line.startsWith("userName:\t")) {
-							SkypeSetting.getInstance().getSkypeUserField().setText(line.substring(10));
+							skypeSetting.getSkypeUserField().setText(line.substring(10));
+							skypeSetting.getStoredUserCheckBox().setSelected(true);
+							continue;
+						}
+						if (line.startsWith("passWord:\t")) {
+							skypeSetting.getSkypePassField().setText(line.substring(10));
+							skypeSetting.getStoredPassCheckBox().setSelected(true);
 							continue;
 						}
 						String[] split = line.split("\t");
 						if (split.length != 2) continue;
-						SkypeSetting.getInstance().addTableData(split[0], split[1]);
+						skypeSetting.addTableData(split[0], split[1]);
 					}
 				} catch (IOException e1) {
 				}
@@ -113,8 +130,11 @@ public class Window extends JFrame {
 					File file = new File("skype.txt");
 					file.createNewFile();
 					PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-					String user = SkypeSetting.getInstance().getSkypeUser();
-					if (user != null && user.length() > 0) pw.println("userName:\t" + user);
+					SkypeSetting skypeSetting = SkypeSetting.getInstance();
+					String user = skypeSetting.getSkypeUser();
+					String pass = skypeSetting.getSkypePass();
+					if (user != null && user.length() > 0 && skypeSetting.getStoredUserCheckBox().isSelected()) pw.println("userName:\t" + user);
+					if (pass != null && pass.length() > 0 && skypeSetting.getStoredPassCheckBox().isSelected()) pw.println("passWord:\t" + pass);
 					for (Map.Entry<String, SkypeSetting.SkypeChatType> entry : SkypeSetting.getSkypeReadMap().entrySet()) {
 						String s = entry.getKey() + "\t" + entry.getValue().getName();
 						pw.println(s);
@@ -132,5 +152,16 @@ public class Window extends JFrame {
 		this.StudyMainPanel = StudyMain.getPanel();
 		this.SkypeAccountPanel = SkypeSetting.getPanel();
 		this.GeneralPanel = GeneralWindow.getPanel();
+	}
+
+	public static Window getInstance() {
+		if (window == null) {
+			try {
+				window = new Window();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return window;
 	}
 }

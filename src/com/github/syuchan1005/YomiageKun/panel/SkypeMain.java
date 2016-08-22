@@ -10,6 +10,7 @@ import com.samczsun.skype4j.events.Listener;
 import com.samczsun.skype4j.events.chat.message.MessageReceivedEvent;
 import com.samczsun.skype4j.exceptions.ConnectionException;
 import com.samczsun.skype4j.exceptions.SkypeException;
+import jp.ne.docomo.smt.dev.common.exception.RestApiException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,7 +53,11 @@ public class SkypeMain {
 				}
 				lunchButton.setEnabled(false);
 				stopButton.setEnabled(true);
-				skypeSpeech("", "Skype読み上げが起動しました");
+				try {
+					skypeSpeech("", "Skype読み上げが起動しました");
+				} catch (RestApiException e1) {
+					JOptionPane.showMessageDialog(((Component) e.getSource()), "正常に読み上げが出来ませんでした");
+				}
 			}
 		});
 		stopButton.addActionListener(new ActionListener() {
@@ -98,18 +103,22 @@ public class SkypeMain {
 			}
 			String sender = e.getMessage().getSender().getDisplayName();
 			String text = e.getMessage().getContent().asPlaintext();
-			if (text.startsWith("\\")) return;
-			skypeSpeech(sender, text);
+			try {
+				skypeSpeech(sender, text);
+			} catch (RestApiException e1) {
+				e.getChat().sendMessage("\\正常に読み上げが出来ませんでした(ち＞ω＜ぇ)/");
+			}
 		}
 	}
 
-	public static void skypeSpeech(String sender, String text) {
+	public static void skypeSpeech(String sender, String text) throws RestApiException {
 		JTextArea skypeLogTextArea = SkypeMain.getInstance().getSkypeLogTextArea();
 		skypeLogTextArea.append(sender + ": " + text);
 		String rep = StudyMain.getInstance().replace(sender, text);
 		if (GeneralWindow.getInstance().isDebugMode()) skypeLogTextArea.append("(" + rep + ")");
 		skypeLogTextArea.append("\n");
 		skypeLogTextArea.setCaretPosition(skypeLogTextArea.getText().length());
+		if (text.startsWith("\\")) return;
 		Speech.speakFemale(rep);
 	}
 }

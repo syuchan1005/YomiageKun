@@ -6,6 +6,9 @@ package com.github.syuchan1005.YomiageKun;
 public class Main {
 
 	public static void main(String[] args) {
-		Window window = new Window();
+		Window instance = Window.getInstance();
+		instance.setVisible(true);
 	}
+
+	// TODO; SSMLの対応(16/08/14
 }

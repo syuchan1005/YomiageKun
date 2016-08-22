@@ -1,10 +1,15 @@
 package com.github.syuchan1005.YomiageKun.panel;
 
+import com.github.syuchan1005.YomiageKun.Window;
 import com.github.syuchan1005.YomiageKun.util.Speech;
+import jp.ne.docomo.smt.dev.common.exception.RestApiException;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by syuchan on 2016/08/12.
@@ -17,10 +22,33 @@ public class GeneralWindow {
 	private JCheckBox debugModeCheckBox;
 
 	private GeneralWindow() {
+		speechText.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					speechTestButton.doClick();
+				}
+			}
+		});
+
 		speechTestButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Speech.speakFemale(speechText.getText());
+				try {
+					Speech.speakFemale(speechText.getText());
+					speechText.setText("");
+				} catch (RestApiException e1) {
+					JOptionPane.showMessageDialog(((Component) e.getSource()), "正常に読み上げが出来ませんでした");
+				}
+			}
+		});
+
+		debugModeCheckBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Window instance = Window.getInstance();
+				if (isDebugMode()) instance.setTitle("読み上げ君(DebugMode)");
+				else instance.setTitle("読み上げ君");
 			}
 		});
 	}

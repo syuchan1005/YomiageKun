@@ -2,6 +2,7 @@ package com.github.syuchan1005.YomiageKun.util;
 
 import jp.ne.docomo.smt.dev.aitalk.AiTalkTextToSpeech;
 import jp.ne.docomo.smt.dev.aitalk.data.AiTalkSsml;
+import jp.ne.docomo.smt.dev.common.exception.RestApiException;
 import jp.ne.docomo.smt.dev.common.http.AuthApiKey;
 
 import javax.sound.sampled.*;
@@ -19,44 +20,31 @@ public class Speech extends Thread {
 	private static Clip clip;
 	private static Speech speech;
 
-	static  {
-		AuthApiKey.initializeAuth("Your API Key Here");
-		speech = new Speech();
-		speech.start();
+	public static void init(String apiKey) {
+		if (speech == null) {
+			AuthApiKey.initializeAuth(apiKey);
+			speech = new Speech();
+			speech.start();
+		}
+		if (clip == null) {
+			try {
+				clip = (Clip) AudioSystem.getLine(info);
+			} catch (LineUnavailableException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	public static void speckMale(String text) {
-		Speech.speak(Speaker.OSAMU, text);
-	}
-
-	public static void speakFemale(String text) {
+	public static void speakFemale(String text) throws RestApiException {
 		Speech.speak(Speaker.MAKI, text);
 	}
 
-	public static void speak(Speaker speaker, String text) {
+	public static void speak(Speaker speaker, String text) throws RestApiException {
 		AiTalkSsml aiTalkSsml = new AiTalkSsml();
 		aiTalkSsml.startVoice(speaker.getName());
 		aiTalkSsml.addText(text);
 		aiTalkSsml.endVoice();
-		aiTalkSsml.addBreak(100);
-		try {
-			byte[] bytes = aiTalkTextToSpeech.requestAiTalkSsmlToSound(aiTalkSsml.makeSsml());
-			if (clip == null) clip = (Clip) AudioSystem.getLine(info);
-			queue.add(bytes);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static boolean isSelectSpeaker(String text, String sender) {
-		for (Speaker speaker : Speaker.values()) {
-			if (text.startsWith(speaker.getName())) {
-				text = text.substring(speaker.getName().length() + 1);
-				speak(speaker, sender + text);
-				return true;
-			}
-		}
-		return false;
+		queue.add(aiTalkTextToSpeech.requestAiTalkSsmlToSound(aiTalkSsml.makeSsml()));
 	}
 
 	@Override

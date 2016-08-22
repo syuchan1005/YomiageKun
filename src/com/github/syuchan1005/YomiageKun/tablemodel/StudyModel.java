@@ -17,4 +17,8 @@ public class StudyModel extends DefaultTableModel {
 		return false;
 	}
 
+	public void removeAll() {
+		this.setRowCount(0);
+	}
+
 }
