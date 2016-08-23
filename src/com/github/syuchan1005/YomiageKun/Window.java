@@ -1,9 +1,6 @@
 package com.github.syuchan1005.YomiageKun;
 
-import com.github.syuchan1005.YomiageKun.panel.GeneralWindow;
-import com.github.syuchan1005.YomiageKun.panel.SkypeSetting;
-import com.github.syuchan1005.YomiageKun.panel.StudyMain;
-import com.github.syuchan1005.YomiageKun.panel.SkypeMain;
+import com.github.syuchan1005.YomiageKun.panel.*;
 import com.github.syuchan1005.YomiageKun.util.Speech;
 import com.github.syuchan1005.YomiageKun.util.Util;
 
@@ -30,7 +27,9 @@ public class Window extends JFrame {
 			private JPanel StudyMainPanel;
 			private JTabbedPane AccountTabPane;
 				private JPanel SkypeAccountPanel;
-	private JPanel GeneralPanel;
+			private JPanel DiscordMainPanel;
+				private JPanel DiscordSettingPanel;
+		private JPanel GeneralPanel;
 
 	private Window() throws IOException {
 		APIKeyProperties = new Properties();
@@ -145,12 +144,47 @@ public class Window extends JFrame {
 				}
 			}
 		}); // Save Skype
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(new File("discord.txt")));
+					String line;
+					while ((line = br.readLine()) != null) {
+						DiscordSetting discordSetting = DiscordSetting.getInstance();
+						if (line.startsWith("token:\t")) {
+							discordSetting.getDiscordTokenField().setText(line.substring(7));
+							discordSetting.getStoredCheckBox().setSelected(true);
+							continue;
+						}
+					}
+				} catch (IOException e1) {
+				}
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				try {
+					File file = new File("discord.txt");
+					file.createNewFile();
+					PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+					DiscordSetting discordSetting = DiscordSetting.getInstance();
+					String token = discordSetting.getDiscordTokenField().getText();
+					if (token != null && token.length() > 0 && discordSetting.getStoredCheckBox().isSelected()) pw.println("token:\t" + token);
+					pw.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}); // Save Discord
 	}
 
 	private void createUIComponents() {
 		this.SkypeMainPanel = SkypeMain.getPanel();
 		this.StudyMainPanel = StudyMain.getPanel();
 		this.SkypeAccountPanel = SkypeSetting.getPanel();
+		this.DiscordMainPanel = DiscordMain.getPanel();
+		this.DiscordSettingPanel = DiscordSetting.getPanel();
 		this.GeneralPanel = GeneralWindow.getPanel();
 	}
 

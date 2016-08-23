@@ -24,21 +24,21 @@ import java.util.Map;
 public class SkypeMain {
 	private JPanel panel1;
 	private JTextArea skypeLogTextArea;
-	private JButton lunchButton;
+	private JButton startButton;
 	private JButton stopButton;
 	private static Skype skype;
 
 	private static SkypeMain skypeMain = new SkypeMain();
 
 	private SkypeMain() {
-		lunchButton.addActionListener(new ActionListener() {
+		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkypeSetting account = SkypeSetting.getInstance();
 				String skypeUser = account.getSkypeUser();
 				String skypePass = account.getSkypePass();
-				if (skypeUser == null || skypeUser.length() == 0||
-						skypePass == null || skypePass.length() == 0) {
+				if (skypeUser == null || skypeUser.length() < 1||
+						skypePass == null || skypePass.length() < 1) {
 					JOptionPane.showMessageDialog(((Component) e.getSource()), "UserNameかPassWordが足りません.\nSetting->Skypeより入力してください");
 					return;
 				}
@@ -51,7 +51,7 @@ public class SkypeMain {
 					new ExceptionWindow(e1, "Login Failed");
 					e1.printStackTrace();
 				}
-				lunchButton.setEnabled(false);
+				startButton.setEnabled(false);
 				stopButton.setEnabled(true);
 				try {
 					skypeSpeech("", "Skype読み上げが起動しました");
@@ -69,7 +69,7 @@ public class SkypeMain {
 					new ExceptionWindow(e1, "Logout Failed");
 					e1.printStackTrace();
 				}
-				lunchButton.setEnabled(true);
+				startButton.setEnabled(true);
 				stopButton.setEnabled(false);
 			}
 		});
