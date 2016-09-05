@@ -1,5 +1,6 @@
 package com.github.syuchan1005.YomiageKun.panel;
 
+import com.github.syuchan1005.YomiageKun.util.SSML;
 import com.github.syuchan1005.YomiageKun.util.Speech;
 import com.samczsun.skype4j.Skype;
 import com.samczsun.skype4j.SkypeBuilder;
@@ -119,6 +120,6 @@ public class SkypeMain {
 		skypeLogTextArea.append("\n");
 		skypeLogTextArea.setCaretPosition(skypeLogTextArea.getText().length());
 		if (text.startsWith("\\")) return;
-		Speech.speakFemale(rep);
+		Speech.speakFemale(SSML.convert(rep));
 	}
 }

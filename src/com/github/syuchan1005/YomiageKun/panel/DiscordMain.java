@@ -1,5 +1,6 @@
 package com.github.syuchan1005.YomiageKun.panel;
 
+import com.github.syuchan1005.YomiageKun.util.SSML;
 import com.github.syuchan1005.YomiageKun.util.Speech;
 import com.google.common.util.concurrent.FutureCallback;
 import de.btobastian.javacord.DiscordAPI;
@@ -91,6 +92,6 @@ public class DiscordMain {
 		discordLogArea.append("\n");
 		discordLogArea.setCaretPosition(discordLogArea.getText().length());
 		if (text.startsWith("\\")) return;
-		Speech.speakFemale(rep);
+		Speech.speakFemale(SSML.convert(rep));
 	}
 }

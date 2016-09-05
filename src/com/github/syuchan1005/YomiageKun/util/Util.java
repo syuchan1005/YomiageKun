@@ -2,22 +2,11 @@ package com.github.syuchan1005.YomiageKun.util;
 
 import com.github.syuchan1005.YomiageKun.panel.ExceptionWindow;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import java.awt.Image;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
@@ -44,10 +33,12 @@ public class Util {
 			Matcher matcher1 = title_pattern1.matcher(response.toString());
 			if (matcher1.find()) {
 				String text = matcher1.group(1);
-				if(text.length() > 10) text = text.substring(0, 10) + "以下略";
+				if (text.length() > 10) text = text.substring(0, 10) + "以下略";
 				return text;
 			}
-		} catch (Exception e) {	 new ExceptionWindow(e, ""); }
+		} catch (Exception e) {
+			new ExceptionWindow(e, "");
+		}
 		return "省略";
 	}
 
@@ -67,8 +58,8 @@ public class Util {
 	public static void setLookAndFeel(JFrame jFrame) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ReflectiveOperationException | UnsupportedLookAndFeelException e) {
-			new ExceptionWindow(e, "");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		SwingUtilities.updateComponentTreeUI(jFrame);
 	}

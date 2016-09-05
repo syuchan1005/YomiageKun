@@ -4,13 +4,10 @@ import com.github.syuchan1005.YomiageKun.panel.*;
 import com.github.syuchan1005.YomiageKun.util.Speech;
 import com.github.syuchan1005.YomiageKun.util.Util;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -22,14 +19,14 @@ public class Window extends JFrame {
 	private static Window window;
 	private Properties APIKeyProperties;
 	private JPanel panel1;
-		private JTabbedPane tabbedPane1;
-			private JPanel SkypeMainPanel;
-			private JPanel StudyMainPanel;
-			private JTabbedPane AccountTabPane;
-				private JPanel SkypeAccountPanel;
-			private JPanel DiscordMainPanel;
-				private JPanel DiscordSettingPanel;
-		private JPanel GeneralPanel;
+	private JTabbedPane tabbedPane1;
+	private JPanel SkypeMainPanel;
+	private JPanel StudyMainPanel;
+	private JTabbedPane AccountTabPane;
+	private JPanel SkypeAccountPanel;
+	private JPanel DiscordMainPanel;
+	private JPanel DiscordSettingPanel;
+	private JPanel GeneralPanel;
 
 	private Window() throws IOException {
 		APIKeyProperties = new Properties();
@@ -132,8 +129,10 @@ public class Window extends JFrame {
 					SkypeSetting skypeSetting = SkypeSetting.getInstance();
 					String user = skypeSetting.getSkypeUser();
 					String pass = skypeSetting.getSkypePass();
-					if (user != null && user.length() > 0 && skypeSetting.getStoredUserCheckBox().isSelected()) pw.println("userName:\t" + user);
-					if (pass != null && pass.length() > 0 && skypeSetting.getStoredPassCheckBox().isSelected()) pw.println("passWord:\t" + pass);
+					if (user != null && user.length() > 0 && skypeSetting.getStoredUserCheckBox().isSelected())
+						pw.println("userName:\t" + user);
+					if (pass != null && pass.length() > 0 && skypeSetting.getStoredPassCheckBox().isSelected())
+						pw.println("passWord:\t" + pass);
 					for (Map.Entry<String, SkypeSetting.SkypeChatType> entry : SkypeSetting.getSkypeReadMap().entrySet()) {
 						String s = entry.getKey() + "\t" + entry.getValue().getName();
 						pw.println(s);
@@ -170,7 +169,8 @@ public class Window extends JFrame {
 					PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 					DiscordSetting discordSetting = DiscordSetting.getInstance();
 					String token = discordSetting.getDiscordTokenField().getText();
-					if (token != null && token.length() > 0 && discordSetting.getStoredCheckBox().isSelected()) pw.println("token:\t" + token);
+					if (token != null && token.length() > 0 && discordSetting.getStoredCheckBox().isSelected())
+						pw.println("token:\t" + token);
 					pw.close();
 				} catch (IOException e1) {
 					e1.printStackTrace();
