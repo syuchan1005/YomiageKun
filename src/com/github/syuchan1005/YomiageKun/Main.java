@@ -11,7 +11,6 @@ public class Main {
 	}
 
 	// TODO; SSMLの対応(16/08/14
-	// TODO: =計算式の対応(16/10/08
 	// TODO; ScriptEngineに対応した言語を動かす(16/10/08
 
 }

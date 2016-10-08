@@ -3,6 +3,7 @@ package com.github.syuchan1005.YomiageKun.panel;
 import com.github.syuchan1005.YomiageKun.*;
 import com.github.syuchan1005.YomiageKun.tablemodel.StudyModel;
 import com.github.syuchan1005.YomiageKun.util.Util;
+import jp.hishidama.eval.EvalException;
 import jp.hishidama.eval.ExpRuleFactory;
 import jp.hishidama.eval.Expression;
 
@@ -246,7 +247,11 @@ public class StudyMain {
 			}
 		}
 		if (text.startsWith("=")) {
-			text = String.valueOf(ExpRuleFactory.getDefaultRule().parse(text.substring(1)).evalDouble());
+			try {
+				text = String.valueOf(ExpRuleFactory.getDefaultRule().parse(text.substring(1)).evalDouble());
+			} catch (EvalException e) {
+				text = text.substring(0);
+			}
 		}
 		text = text.toUpperCase();
 		text = text.replaceAll("HTTPS?:\\/\\/.*", "URL省略");
