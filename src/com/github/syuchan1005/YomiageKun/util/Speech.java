@@ -35,16 +35,18 @@ public class Speech extends Thread {
 		}
 	}
 
-	public static void speakFemale(String text) throws RestApiException {
-		Speech.speak(Speaker.MAKI, text);
+	public static byte[] speakFemale(String text) throws RestApiException {
+		return Speech.speak(Speaker.MAKI, text);
 	}
 
-	public static void speak(Speaker speaker, String text) throws RestApiException {
+	public static byte[] speak(Speaker speaker, String text) throws RestApiException {
 		AiTalkSsml aiTalkSsml = new AiTalkSsml();
 		aiTalkSsml.startVoice(speaker.getName());
 		aiTalkSsml.addText(text);
 		aiTalkSsml.endVoice();
-		queue.add(aiTalkTextToSpeech.requestAiTalkSsmlToSound(aiTalkSsml.makeSsml()));
+		byte[] e = aiTalkTextToSpeech.requestAiTalkSsmlToSound(aiTalkSsml.makeSsml());
+		queue.add(e);
+		return e;
 	}
 
 	@Override

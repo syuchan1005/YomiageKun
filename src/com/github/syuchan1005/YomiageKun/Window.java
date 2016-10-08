@@ -156,6 +156,10 @@ public class Window extends JFrame {
 							discordSetting.getStoredCheckBox().setSelected(true);
 							continue;
 						}
+						if (line.startsWith("isSpeakInCall:\t")) {
+							discordSetting.getIsSpeakInCallCheckBox().setSelected(Boolean.parseBoolean(line.substring(15)));
+							continue;
+						}
 					}
 				} catch (IOException e1) {
 				}
@@ -169,8 +173,8 @@ public class Window extends JFrame {
 					PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 					DiscordSetting discordSetting = DiscordSetting.getInstance();
 					String token = discordSetting.getDiscordTokenField().getText();
-					if (token != null && token.length() > 0 && discordSetting.getStoredCheckBox().isSelected())
-						pw.println("token:\t" + token);
+					if (token != null && token.length() > 0 && discordSetting.getStoredCheckBox().isSelected()) pw.println("token:\t" + token);
+					pw.println("isSpeakInCall:\t" + discordSetting.getIsSpeakInCallCheckBox().isSelected());
 					pw.close();
 				} catch (IOException e1) {
 					e1.printStackTrace();

@@ -10,6 +10,7 @@ public class DiscordSetting {
 	private JPanel mainPanel;
 	private JTextField tokenField;
 	private JCheckBox storedCheckBox;
+	private JCheckBox isSpeakInCallCheckBox;
 
 	private DiscordSetting() {
 
@@ -29,5 +30,9 @@ public class DiscordSetting {
 
 	public JCheckBox getStoredCheckBox() {
 		return storedCheckBox;
+	}
+
+	public JCheckBox getIsSpeakInCallCheckBox() {
+		return isSpeakInCallCheckBox;
 	}
 }

@@ -58,8 +58,8 @@ public class Util {
 	public static void setLookAndFeel(JFrame jFrame) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (ReflectiveOperationException | UnsupportedLookAndFeelException e) {
+			new ExceptionWindow(e, "");
 		}
 		SwingUtilities.updateComponentTreeUI(jFrame);
 	}

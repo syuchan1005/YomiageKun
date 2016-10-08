@@ -1,0 +1,10 @@
+.idea
+libs
+modules
+out
+src/META-INF
+src/resources/APIKey.properties
+discord.txt
+skype.txt
+study.txt
+*.iml
