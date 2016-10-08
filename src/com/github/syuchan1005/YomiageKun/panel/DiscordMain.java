@@ -17,17 +17,16 @@ import sx.blah.discord.util.audio.AudioPlayer;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Created by syuchan on 2016/08/23.
@@ -35,6 +34,7 @@ import java.util.List;
 public class DiscordMain extends Thread {
 	private static AudioFormat audioFormat = new AudioFormat(16000f, 16, 1, true, true);
 	private static Queue<byte[]> queue = new ArrayDeque<>();
+	public static String lastUsername = "";
 	private static DiscordMain instance = new DiscordMain();
 	private IDiscordClient discordClient;
 	private List<IVoiceChannel> voiceChannels = new ArrayList<>();
@@ -49,19 +49,20 @@ public class DiscordMain extends Thread {
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				String token = DiscordSetting.getInstance().getDiscordTokenField().getText();
-				if (token == null || token.length() < 1) {
-					JOptionPane.showMessageDialog(((Component) e.getSource()), "Tokenが足りません.\nSetting->Discordより入力してください");
-					return;
-				}
 				if (discordClient == null) {
-					final ClientBuilder clientBuilder = new ClientBuilder().withToken(token);
+					ClientBuilder clientBuilder = new ClientBuilder();
+					DiscordSetting discordSetting = DiscordSetting.getInstance();
+					if (discordSetting.getTokenRadioButton().isSelected()) {
+						clientBuilder.withToken(discordSetting.getDiscordTokenField().getText());
+					} else {
+						clientBuilder.withLogin(discordSetting.getEmailField().getText(), new String(discordSetting.getPasswordField().getPassword()));
+					}
 					try {
 						startButton.setEnabled(false);
 						stopButton.setEnabled(true);
 						discordClient = clientBuilder.login();
 					} catch (DiscordException e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(((Component) e.getSource()), "うまくログインできませんでした. Settings -> Discordより設定を確認してください");
 						startButton.setEnabled(true);
 						stopButton.setEnabled(false);
 					}
@@ -73,7 +74,7 @@ public class DiscordMain extends Thread {
 							if (startButton.isEnabled()) return;
 							try {
 								String content = message.getContent();
-								if (content.equalsIgnoreCase("VoiceStart")) {
+								if (content.equalsIgnoreCase("voicejoin")) {
 									IVoiceChannel channel = message.getAuthor().getConnectedVoiceChannels().get(0);
 									voiceChannels.add(channel);
 									try {
@@ -86,7 +87,7 @@ public class DiscordMain extends Thread {
 										}
 									}
 								}
-								if (content.equalsIgnoreCase("VoiceLeave")) {
+								if (content.equalsIgnoreCase("voiceleave")) {
 									IVoiceChannel channel = message.getAuthor().getConnectedVoiceChannels().get(0);
 									voiceChannels.remove(channel);
 									channel.leave();
@@ -136,11 +137,12 @@ public class DiscordMain extends Thread {
 	public void discordSpeech(String sender, String text) throws RestApiException {
 		JTextArea discordLogArea = DiscordMain.getInstance().getDiscordLogArea();
 		discordLogArea.append(sender + ": " + text);
-		String rep = StudyMain.getInstance().replace(sender, text);
+		String rep = StudyMain.getInstance().replace(sender, text, !lastUsername.equalsIgnoreCase(sender));
+		lastUsername = sender;
 		if (GeneralWindow.getInstance().isDebugMode()) discordLogArea.append("(" + rep + ")");
 		discordLogArea.append("\n");
 		discordLogArea.setCaretPosition(discordLogArea.getText().length());
-		if (text.startsWith("\\")) return;
+		if (text.startsWith("\\") || text.startsWith("!")) return;
 		if (DiscordSetting.getInstance().getIsSpeakInCallCheckBox().isSelected()) {
 			queue.add(Speech.speakFemale(SSML.convert(rep)));
 		}

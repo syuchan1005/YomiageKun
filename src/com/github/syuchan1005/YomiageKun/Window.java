@@ -151,9 +151,25 @@ public class Window extends JFrame {
 					String line;
 					while ((line = br.readLine()) != null) {
 						DiscordSetting discordSetting = DiscordSetting.getInstance();
+						if (line.startsWith("select:\t")) {
+							boolean b = Boolean.parseBoolean(line.substring(8));
+							discordSetting.getTokenRadioButton().setSelected(b);
+							discordSetting.getEmailRadioButton().setSelected(!b);
+							continue;
+						}
 						if (line.startsWith("token:\t")) {
 							discordSetting.getDiscordTokenField().setText(line.substring(7));
-							discordSetting.getStoredCheckBox().setSelected(true);
+							discordSetting.getStoredTokenCheckBox().setSelected(true);
+							continue;
+						}
+						if (line.startsWith("email:\t")) {
+							discordSetting.getEmailField().setText(line.substring(7));
+							discordSetting.getStoredEmailCheckBox().setSelected(true);
+							continue;
+						}
+						if (line.startsWith("pass:\t")) {
+							discordSetting.getPasswordField().setText(line.substring(6));
+							discordSetting.getStoredPasswordCheckBox().setSelected(true);
 							continue;
 						}
 						if (line.startsWith("isSpeakInCall:\t")) {
@@ -172,8 +188,13 @@ public class Window extends JFrame {
 					file.createNewFile();
 					PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 					DiscordSetting discordSetting = DiscordSetting.getInstance();
+					pw.println("select:\t" + discordSetting.getTokenRadioButton().isSelected());
 					String token = discordSetting.getDiscordTokenField().getText();
-					if (token != null && token.length() > 0 && discordSetting.getStoredCheckBox().isSelected()) pw.println("token:\t" + token);
+					if (token != null && token.length() > 0 && discordSetting.getStoredTokenCheckBox().isSelected()) pw.println("token:\t" + token);
+					String email = discordSetting.getEmailField().getText();
+					if (email != null && email.length() > 0 && discordSetting.getStoredEmailCheckBox().isSelected()) pw.println("email:\t" + email);
+					String pass = new String(discordSetting.getPasswordField().getPassword());
+					if (pass != null && pass.length() > 0 && discordSetting.getStoredPasswordCheckBox().isSelected()) pw.println("pass:\t" + pass);
 					pw.println("isSpeakInCall:\t" + discordSetting.getIsSpeakInCallCheckBox().isSelected());
 					pw.close();
 				} catch (IOException e1) {

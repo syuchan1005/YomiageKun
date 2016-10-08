@@ -8,8 +8,14 @@ import javax.swing.*;
 public class DiscordSetting {
 	private static DiscordSetting instance = new DiscordSetting();
 	private JPanel mainPanel;
+	private JRadioButton tokenRadioButton;
 	private JTextField tokenField;
-	private JCheckBox storedCheckBox;
+	private JCheckBox storedTokenCheckBox;
+	private JRadioButton emailRadioButton;
+	private JTextField emailField;
+	private JPasswordField passwordField;
+	private JCheckBox storedEmailCheckBox;
+	private JCheckBox storedPasswordCheckBox;
 	private JCheckBox isSpeakInCallCheckBox;
 
 	private DiscordSetting() {
@@ -24,12 +30,40 @@ public class DiscordSetting {
 		return instance.mainPanel;
 	}
 
+	public JRadioButton getTokenRadioButton() {
+		return tokenRadioButton;
+	}
+
+	public JTextField getTokenField() {
+		return tokenField;
+	}
+
+	public JRadioButton getEmailRadioButton() {
+		return emailRadioButton;
+	}
+
+	public JTextField getEmailField() {
+		return emailField;
+	}
+
+	public JPasswordField getPasswordField() {
+		return passwordField;
+	}
+
+	public JCheckBox getStoredEmailCheckBox() {
+		return storedEmailCheckBox;
+	}
+
+	public JCheckBox getStoredPasswordCheckBox() {
+		return storedPasswordCheckBox;
+	}
+
 	public JTextField getDiscordTokenField() {
 		return tokenField;
 	}
 
-	public JCheckBox getStoredCheckBox() {
-		return storedCheckBox;
+	public JCheckBox getStoredTokenCheckBox() {
+		return storedTokenCheckBox;
 	}
 
 	public JCheckBox getIsSpeakInCallCheckBox() {

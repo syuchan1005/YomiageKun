@@ -23,6 +23,7 @@ import java.util.Map;
  * Created by syuchan on 2016/04/03.
  */
 public class SkypeMain {
+	public static String lastUsername = "";
 	private JPanel panel1;
 	private JTextArea skypeLogTextArea;
 	private JButton startButton;
@@ -115,11 +116,12 @@ public class SkypeMain {
 	public static void skypeSpeech(String sender, String text) throws RestApiException {
 		JTextArea skypeLogTextArea = SkypeMain.getInstance().getSkypeLogTextArea();
 		skypeLogTextArea.append(sender + ": " + text);
-		String rep = StudyMain.getInstance().replace(sender, text);
+		String rep = StudyMain.getInstance().replace(sender, text, !lastUsername.equalsIgnoreCase(sender));
+		lastUsername = sender;
 		if (GeneralWindow.getInstance().isDebugMode()) skypeLogTextArea.append("(" + rep + ")");
 		skypeLogTextArea.append("\n");
 		skypeLogTextArea.setCaretPosition(skypeLogTextArea.getText().length());
-		if (text.startsWith("\\")) return;
+		if (text.startsWith("\\") || text.startsWith("!")) return;
 		Speech.speakFemale(SSML.convert(rep));
 	}
 }

@@ -42,7 +42,7 @@ public class Speech extends Thread {
 	public static byte[] speak(Speaker speaker, String text) throws RestApiException {
 		AiTalkSsml aiTalkSsml = new AiTalkSsml();
 		aiTalkSsml.startVoice(speaker.getName());
-		aiTalkSsml.addText(text);
+		aiTalkSsml.addText(text.replace('<', ' ').replace('>', ' '));
 		aiTalkSsml.endVoice();
 		byte[] e = aiTalkTextToSpeech.requestAiTalkSsmlToSound(aiTalkSsml.makeSsml());
 		queue.add(e);

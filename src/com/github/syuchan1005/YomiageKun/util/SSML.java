@@ -27,6 +27,10 @@ public class SSML {
 			}
 			return convert(split[0] + split[1] + split[2]);
 		}
-		return text;
+		return escape(text);
+	}
+
+	protected static String escape(String text) {
+		return text.replace('<', ' ').replace('>', ' ');
 	}
 }

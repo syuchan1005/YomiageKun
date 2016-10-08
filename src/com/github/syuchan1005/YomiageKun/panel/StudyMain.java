@@ -3,6 +3,8 @@ package com.github.syuchan1005.YomiageKun.panel;
 import com.github.syuchan1005.YomiageKun.*;
 import com.github.syuchan1005.YomiageKun.tablemodel.StudyModel;
 import com.github.syuchan1005.YomiageKun.util.Util;
+import jp.hishidama.eval.ExpRuleFactory;
+import jp.hishidama.eval.Expression;
 
 import javax.swing.*;
 import java.awt.*;
@@ -211,9 +213,14 @@ public class StudyMain {
 		return studyContentList;
 	}
 
-	public String replace(String user, String text) {
-		user = user.toUpperCase();
-		user = studyReplace(user);
+	public String replace(String user, String text, boolean isUserSpeak) {
+		if (isUserSpeak) {
+			user = user.toUpperCase();
+			user = studyReplace(user);
+			user += " ";
+		} else {
+			user = "";
+		}
 		Matcher matcher = pattern.matcher(text);
 		if (matcher.find()) {
 			switch (matcher.group(1)) {
@@ -232,16 +239,19 @@ public class StudyMain {
 					if (split.length != 2) break;
 					if (split[0].length() == 0 || split[1].length() == 0) break;
 					addListData(split[0], split[1], 0, isReg);
-					return user + " " + split[0] + (isReg ? "を正規表現で" : "を") + split[1] + "と覚えました";
+					return user + split[0] + (isReg ? "を正規表現で" : "を") + split[1] + "と覚えました";
 				case "忘却":
 					removeListData(matcher.group(2));
-					return user + " " + matcher.group(2) + "を忘れました";
+					return user + matcher.group(2) + "を忘れました";
 			}
+		}
+		if (text.startsWith("=")) {
+			text = String.valueOf(ExpRuleFactory.getDefaultRule().parse(text.substring(1)).evalDouble());
 		}
 		text = text.toUpperCase();
 		text = text.replaceAll("HTTPS?:\\/\\/.*", "URL省略");
 		text = studyReplace(text);
-		return user + " " + text;
+		return user + text;
 	}
 
 	private String studyReplace(String str) {
