@@ -252,6 +252,7 @@ public class StudyMain {
 			} catch (EvalException e) {
 				text = text.substring(0);
 			}
+			return user + text;
 		}
 		text = text.toUpperCase();
 		text = text.replaceAll("HTTPS?:\\/\\/.*", "URL省略");

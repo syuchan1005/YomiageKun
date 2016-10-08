@@ -72,6 +72,8 @@ public class DiscordMain extends Thread {
 						public void handle(MessageReceivedEvent event) {
 							IMessage message = event.getMessage();
 							if (startButton.isEnabled()) return;
+							String topic = message.getChannel().getTopic();
+							if (topic.indexOf("!read") != -1) return;
 							try {
 								String content = message.getContent();
 								if (content.equalsIgnoreCase("voicejoin")) {
