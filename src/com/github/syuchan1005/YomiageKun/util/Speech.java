@@ -40,11 +40,18 @@ public class Speech extends Thread {
 	}
 
 	public static byte[] speak(Speaker speaker, String text) throws RestApiException {
-		AiTalkSsml aiTalkSsml = new AiTalkSsml();
-		aiTalkSsml.startVoice(speaker.getName());
-		aiTalkSsml.addText(text.replace('<', ' ').replace('>', ' '));
-		aiTalkSsml.endVoice();
-		byte[] e = aiTalkTextToSpeech.requestAiTalkSsmlToSound(aiTalkSsml.makeSsml());
+		return speak(speaker, text, false);
+	}
+
+	public static byte[] speak(Speaker speaker, String text, boolean isSSML) throws RestApiException {
+		if (!isSSML) {
+			AiTalkSsml aiTalkSsml = new AiTalkSsml();
+			aiTalkSsml.startVoice(speaker.getName());
+			aiTalkSsml.addText(text.replace('<', ' ').replace('>', ' '));
+			aiTalkSsml.endVoice();
+			text = aiTalkSsml.makeSsml();
+		}
+		byte[] e = aiTalkTextToSpeech.requestAiTalkSsmlToSound(text);
 		queue.add(e);
 		return e;
 	}

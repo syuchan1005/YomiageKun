@@ -58,7 +58,7 @@ public class Window extends JFrame {
 			@Override
 			public void windowOpened(WindowEvent e) {
 				try {
-					BufferedReader br = new BufferedReader(new FileReader(new File("study.txt")));
+					BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("study.txt")), "UTF-8"));
 					List<StudyMain.StudyContent> studyContentList = StudyMain.getStudyContentList();
 					String line;
 					while ((line = br.readLine()) != null) {
@@ -80,7 +80,7 @@ public class Window extends JFrame {
 				try {
 					File file = new File("study.txt");
 					file.createNewFile();
-					PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+					PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8")));
 					for (StudyMain.StudyContent studyContent : StudyMain.getStudyContentList()) {
 						String s = studyContent.getBeforeText() +
 								"\t" + studyContent.getAfterText() +
@@ -98,7 +98,7 @@ public class Window extends JFrame {
 			@Override
 			public void windowOpened(WindowEvent e) {
 				try {
-					BufferedReader br = new BufferedReader(new FileReader(new File("skype.txt")));
+					BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("skype.txt")), "UTF-8"));
 					String line;
 					while ((line = br.readLine()) != null) {
 						SkypeSetting skypeSetting = SkypeSetting.getInstance();
@@ -125,7 +125,7 @@ public class Window extends JFrame {
 				try {
 					File file = new File("skype.txt");
 					file.createNewFile();
-					PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+					PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8")));
 					SkypeSetting skypeSetting = SkypeSetting.getInstance();
 					String user = skypeSetting.getSkypeUser();
 					String pass = skypeSetting.getSkypePass();
@@ -147,7 +147,7 @@ public class Window extends JFrame {
 			@Override
 			public void windowOpened(WindowEvent e) {
 				try {
-					BufferedReader br = new BufferedReader(new FileReader(new File("discord.txt")));
+					BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("discord.txt")), "UTF-8"));
 					String line;
 					while ((line = br.readLine()) != null) {
 						DiscordSetting discordSetting = DiscordSetting.getInstance();
@@ -186,7 +186,7 @@ public class Window extends JFrame {
 				try {
 					File file = new File("discord.txt");
 					file.createNewFile();
-					PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+					PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8")));
 					DiscordSetting discordSetting = DiscordSetting.getInstance();
 					pw.println("select:\t" + discordSetting.getTokenRadioButton().isSelected());
 					String token = discordSetting.getDiscordTokenField().getText();

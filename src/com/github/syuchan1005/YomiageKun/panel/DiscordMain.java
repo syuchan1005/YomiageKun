@@ -60,51 +60,62 @@ public class DiscordMain extends Thread {
 					try {
 						startButton.setEnabled(false);
 						stopButton.setEnabled(true);
-						discordClient = clientBuilder.login();
+						discordClient = clientBuilder.build();
 					} catch (DiscordException e1) {
-						JOptionPane.showMessageDialog(((Component) e.getSource()), "うまくログインできませんでした. Settings -> Discordより設定を確認してください");
+						e1.printStackTrace();
 						startButton.setEnabled(true);
 						stopButton.setEnabled(false);
 					}
-					EventDispatcher dispatcher = discordClient.getDispatcher();
-					dispatcher.registerListener(new IListener<MessageReceivedEvent>() {
-						@Override
-						public void handle(MessageReceivedEvent event) {
-							IMessage message = event.getMessage();
-							if (startButton.isEnabled()) return;
-							String topic = message.getChannel().getTopic();
-							if (topic.indexOf("!read") != -1) return;
-							try {
-								String content = message.getContent();
-								if (content.equalsIgnoreCase("voicejoin")) {
-									IVoiceChannel channel = message.getAuthor().getConnectedVoiceChannels().get(0);
-									voiceChannels.add(channel);
+				}
+				try {
+					startButton.setEnabled(false);
+					stopButton.setEnabled(true);
+					discordClient.login();
+				} catch (DiscordException e1) {
+					JOptionPane.showMessageDialog(((Component) e.getSource()), "うまくログインできませんでした. Settings -> Discordより設定を確認してください");
+					startButton.setEnabled(true);
+					stopButton.setEnabled(false);
+				}
+				EventDispatcher dispatcher = discordClient.getDispatcher();
+				dispatcher.registerListener(new IListener<MessageReceivedEvent>() {
+					@Override
+					public void handle(MessageReceivedEvent event) {
+						IMessage message = event.getMessage();
+						if (startButton.isEnabled()) return;
+						String topic = message.getChannel().getTopic();
+						if (topic != null && topic.contains("!read")) return;
+						try {
+							String content = message.getContent();
+							if (content.equalsIgnoreCase("!join")) {
+								IVoiceChannel channel = message.getAuthor().getConnectedVoiceChannels().get(0);
+								voiceChannels.add(channel);
+								try {
+									channel.join();
+								} catch (MissingPermissionsException e1) {
 									try {
-										channel.join();
-									} catch (MissingPermissionsException e1) {
-										try {
-											message.getChannel().sendMessage("\\通話に参加出来ませんでした(ち＞ω＜ぇ)/");
-										} catch (MissingPermissionsException | RateLimitException | DiscordException e2) {
-											e2.printStackTrace();
-										}
+										message.getChannel().sendMessage("\\通話に参加出来ませんでした(ち＞ω＜ぇ)/");
+									} catch (MissingPermissionsException | RateLimitException | DiscordException e2) {
+										e2.printStackTrace();
 									}
 								}
-								if (content.equalsIgnoreCase("voiceleave")) {
-									IVoiceChannel channel = message.getAuthor().getConnectedVoiceChannels().get(0);
-									voiceChannels.remove(channel);
-									channel.leave();
-								}
-								discordSpeech(message.getAuthor().getName(), content);
-							} catch (RestApiException e1) {
-								try {
-									message.reply("\\正常に読み上げが出来ませんでした(ち＞ω＜ぇ)/");
-								} catch (MissingPermissionsException | RateLimitException | DiscordException e2) {
-									e2.printStackTrace();
-								}
 							}
+							if (content.equalsIgnoreCase("!leave")) {
+								IVoiceChannel channel = message.getAuthor().getConnectedVoiceChannels().get(0);
+								voiceChannels.remove(channel);
+								channel.leave();
+							}
+							discordSpeech(message.getAuthor().getName(), content);
+						} catch (RestApiException e1) {
+							/*
+							try {
+								message.reply("\\正常に読み上げが出来ませんでした(ち＞ω＜ぇ)/");
+							} catch (MissingPermissionsException | RateLimitException | DiscordException e2) {
+								e2.printStackTrace();
+							}
+							*/
 						}
-					});
-				}
+					}
+				});
 			}
 		});
 		stopButton.addActionListener(new ActionListener() {
@@ -146,7 +157,9 @@ public class DiscordMain extends Thread {
 		discordLogArea.setCaretPosition(discordLogArea.getText().length());
 		if (text.startsWith("\\") || text.startsWith("!")) return;
 		if (DiscordSetting.getInstance().getIsSpeakInCallCheckBox().isSelected()) {
-			queue.add(Speech.speakFemale(SSML.convert(rep)));
+			String convert = SSML.convert("(maki)" + rep);
+			System.out.println(convert);
+			queue.add(Speech.speak(null, convert, true));
 		}
 	}
 

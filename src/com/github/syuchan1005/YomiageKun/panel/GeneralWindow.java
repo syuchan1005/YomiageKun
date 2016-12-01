@@ -20,6 +20,7 @@ public class GeneralWindow {
 	private JButton speechTestButton;
 	private JTextField speechText;
 	private JCheckBox debugModeCheckBox;
+	private JButton discordButton;
 
 	private GeneralWindow() {
 		speechText.addKeyListener(new KeyAdapter() {
@@ -49,6 +50,16 @@ public class GeneralWindow {
 				Window instance = Window.getInstance();
 				if (isDebugMode()) instance.setTitle("読み上げ君(DebugMode)");
 				else instance.setTitle("読み上げ君");
+			}
+		});
+		discordButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					DiscordMain.getInstance().discordSpeech("", speechText.getText());
+				} catch (RestApiException e1) {
+					new ExceptionWindow(e1);
+				}
 			}
 		});
 	}

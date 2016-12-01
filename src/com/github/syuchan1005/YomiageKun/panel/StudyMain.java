@@ -239,6 +239,7 @@ public class StudyMain {
 					String[] split = group.split("=");
 					if (split.length != 2) break;
 					if (split[0].length() == 0 || split[1].length() == 0) break;
+					if (split[1].length() > 20) return "20文字以上は教育できません";
 					addListData(split[0], split[1], 0, isReg);
 					return user + split[0] + (isReg ? "を正規表現で" : "を") + split[1] + "と覚えました";
 				case "忘却":
