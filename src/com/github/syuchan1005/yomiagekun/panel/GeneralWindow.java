@@ -1,7 +1,7 @@
-package com.github.syuchan1005.YomiageKun.panel;
+package com.github.syuchan1005.yomiagekun.panel;
 
-import com.github.syuchan1005.YomiageKun.Window;
-import com.github.syuchan1005.YomiageKun.util.Speech;
+import com.github.syuchan1005.yomiagekun.Window;
+import com.github.syuchan1005.yomiagekun.util.Speech;
 import jp.ne.docomo.smt.dev.common.exception.RestApiException;
 
 import javax.swing.*;

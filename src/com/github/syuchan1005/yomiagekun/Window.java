@@ -1,8 +1,8 @@
-package com.github.syuchan1005.YomiageKun;
+package com.github.syuchan1005.yomiagekun;
 
-import com.github.syuchan1005.YomiageKun.panel.*;
-import com.github.syuchan1005.YomiageKun.util.Speech;
-import com.github.syuchan1005.YomiageKun.util.Util;
+import com.github.syuchan1005.yomiagekun.panel.*;
+import com.github.syuchan1005.yomiagekun.util.Speech;
+import com.github.syuchan1005.yomiagekun.util.Util;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;

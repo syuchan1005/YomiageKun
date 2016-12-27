@@ -1,4 +1,4 @@
-package com.github.syuchan1005.YomiageKun.tablemodel;
+package com.github.syuchan1005.yomiagekun.tablemodel;
 
 import javax.swing.table.DefaultTableModel;
 

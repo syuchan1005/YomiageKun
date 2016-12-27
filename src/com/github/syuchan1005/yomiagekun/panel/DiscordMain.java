@@ -1,7 +1,7 @@
-package com.github.syuchan1005.YomiageKun.panel;
+package com.github.syuchan1005.yomiagekun.panel;
 
-import com.github.syuchan1005.YomiageKun.util.SSML;
-import com.github.syuchan1005.YomiageKun.util.Speech;
+import com.github.syuchan1005.yomiagekun.util.SSML;
+import com.github.syuchan1005.yomiagekun.util.Speech;
 import jp.ne.docomo.smt.dev.common.exception.RestApiException;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
@@ -28,8 +28,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by syuchan on 2016/08/23.

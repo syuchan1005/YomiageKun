@@ -1,4 +1,4 @@
-package com.github.syuchan1005.YomiageKun;
+package com.github.syuchan1005.yomiagekun;
 
 /**
  * Created by syuchan on 2016/04/02.

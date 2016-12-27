@@ -1,6 +1,6 @@
-package com.github.syuchan1005.YomiageKun.panel;
+package com.github.syuchan1005.yomiagekun.panel;
 
-import com.github.syuchan1005.YomiageKun.tablemodel.SkypeModel;
+import com.github.syuchan1005.yomiagekun.tablemodel.SkypeModel;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;

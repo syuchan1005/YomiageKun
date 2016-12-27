@@ -1,6 +1,4 @@
-package com.github.syuchan1005.YomiageKun.util;
-
-import java.util.Arrays;
+package com.github.syuchan1005.yomiagekun.util;
 
 /**
  * Created by syuchan on 2016/09/05.

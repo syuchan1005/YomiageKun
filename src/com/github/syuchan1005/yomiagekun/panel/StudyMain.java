@@ -1,18 +1,15 @@
-package com.github.syuchan1005.YomiageKun.panel;
+package com.github.syuchan1005.yomiagekun.panel;
 
-import com.github.syuchan1005.YomiageKun.*;
-import com.github.syuchan1005.YomiageKun.tablemodel.StudyModel;
-import com.github.syuchan1005.YomiageKun.util.Util;
+import com.github.syuchan1005.yomiagekun.tablemodel.StudyModel;
+import com.github.syuchan1005.yomiagekun.util.Util;
 import jp.hishidama.eval.EvalException;
 import jp.hishidama.eval.ExpRuleFactory;
-import jp.hishidama.eval.Expression;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.NumberFormat;

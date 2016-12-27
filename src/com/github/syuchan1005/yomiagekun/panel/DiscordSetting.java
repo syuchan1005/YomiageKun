@@ -1,4 +1,4 @@
-package com.github.syuchan1005.YomiageKun.panel;
+package com.github.syuchan1005.yomiagekun.panel;
 
 import javax.swing.*;
 

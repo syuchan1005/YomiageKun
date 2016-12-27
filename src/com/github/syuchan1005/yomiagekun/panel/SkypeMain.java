@@ -1,7 +1,7 @@
-package com.github.syuchan1005.YomiageKun.panel;
+package com.github.syuchan1005.yomiagekun.panel;
 
-import com.github.syuchan1005.YomiageKun.util.SSML;
-import com.github.syuchan1005.YomiageKun.util.Speech;
+import com.github.syuchan1005.yomiagekun.util.SSML;
+import com.github.syuchan1005.yomiagekun.util.Speech;
 import com.samczsun.skype4j.Skype;
 import com.samczsun.skype4j.SkypeBuilder;
 import com.samczsun.skype4j.chat.GroupChat;

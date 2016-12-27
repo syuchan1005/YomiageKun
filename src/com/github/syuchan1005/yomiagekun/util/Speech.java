@@ -1,4 +1,4 @@
-package com.github.syuchan1005.YomiageKun.util;
+package com.github.syuchan1005.yomiagekun.util;
 
 import jp.ne.docomo.smt.dev.aitalk.AiTalkTextToSpeech;
 import jp.ne.docomo.smt.dev.aitalk.data.AiTalkSsml;

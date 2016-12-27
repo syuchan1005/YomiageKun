@@ -1,6 +1,6 @@
-package com.github.syuchan1005.YomiageKun.util;
+package com.github.syuchan1005.yomiagekun.util;
 
-import com.github.syuchan1005.YomiageKun.panel.ExceptionWindow;
+import com.github.syuchan1005.yomiagekun.panel.ExceptionWindow;
 
 import javax.swing.*;
 import java.awt.*;
