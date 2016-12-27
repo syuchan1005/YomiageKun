@@ -214,10 +214,9 @@ public class StudyMain {
 		return studyContentList;
 	}
 
-	public String replace(String user, String text, boolean isUserSpeak) {
+	public String getReadingText(String user, String text, boolean isUserSpeak) {
 		if (isUserSpeak) {
-			user = user.toUpperCase();
-			user = studyReplace(user);
+			user = studyReplace(user.toUpperCase());
 			user += " ";
 		} else {
 			user = "";

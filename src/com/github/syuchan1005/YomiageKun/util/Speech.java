@@ -5,7 +5,11 @@ import jp.ne.docomo.smt.dev.aitalk.data.AiTalkSsml;
 import jp.ne.docomo.smt.dev.common.exception.RestApiException;
 import jp.ne.docomo.smt.dev.common.http.AuthApiKey;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
 import java.util.ArrayDeque;
 import java.util.Queue;
 

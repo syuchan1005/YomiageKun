@@ -116,7 +116,7 @@ public class SkypeMain {
 	public static void skypeSpeech(String sender, String text) throws RestApiException {
 		JTextArea skypeLogTextArea = SkypeMain.getInstance().getSkypeLogTextArea();
 		skypeLogTextArea.append(sender + ": " + text);
-		String rep = StudyMain.getInstance().replace(sender, text, !lastUsername.equalsIgnoreCase(sender));
+		String rep = StudyMain.getInstance().getReadingText(sender, text, !lastUsername.equalsIgnoreCase(sender));
 		lastUsername = sender;
 		if (GeneralWindow.getInstance().isDebugMode()) skypeLogTextArea.append("(" + rep + ")");
 		skypeLogTextArea.append("\n");

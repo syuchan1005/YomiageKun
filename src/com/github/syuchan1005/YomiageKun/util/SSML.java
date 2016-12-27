@@ -12,7 +12,7 @@ public class SSML {
 
 	public static String convert(String text) {
 		String ssmls = "";
-		if (text.indexOf("(") != -1 && text.indexOf(")") != -1) {
+		if (text.contains("(") && text.contains(")")) {
 			int num = text.indexOf("(");
 			String substring = text.substring(num + 1);
 			int endIndex = substring.indexOf(")");
@@ -28,7 +28,7 @@ public class SSML {
 					return convert(ssmls);
 				}
 			}
-			return convert(ssmls);
+			return convert(String.join("", split));
 		}
 		return text;
 	}
