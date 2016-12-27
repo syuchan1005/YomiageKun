@@ -227,12 +227,12 @@ public class StudyMain {
 				case "教育":
 					String group = matcher.group(2);
 					boolean isReg = false;
-					if (group.indexOf("==") != -1) {
+					if (group.contains("==")) {
 						group = group.replace("==", "=");
-					} else if (group.indexOf("=R") != -1) {
+					} else if (group.contains("=R")) {
 						isReg = true;
 						group = group.replace("=R", "=");
-					} else if (group.indexOf("=") == -1) {
+					} else if (!group.contains("=")) {
 						break;
 					}
 					String[] split = group.split("=");
@@ -249,9 +249,7 @@ public class StudyMain {
 		if (text.startsWith("=")) {
 			try {
 				text = String.valueOf(ExpRuleFactory.getDefaultRule().parse(text.substring(1)).evalDouble());
-			} catch (EvalException e) {
-				text = text.substring(0);
-			}
+			} catch (EvalException e) {	}
 			return user + text;
 		}
 		text = text.toUpperCase();
