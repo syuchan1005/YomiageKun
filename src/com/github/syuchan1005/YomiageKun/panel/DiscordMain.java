@@ -24,9 +24,12 @@ import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Queue;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by syuchan on 2016/08/23.
@@ -37,7 +40,7 @@ public class DiscordMain extends Thread {
 	public static String lastUsername = "";
 	private static DiscordMain instance = new DiscordMain();
 	private IDiscordClient discordClient;
-	private List<IVoiceChannel> voiceChannels = new ArrayList<>();
+	private Set<IVoiceChannel> voiceChannels = new HashSet<>();
 	private JPanel mainPanel;
 	private JTextArea discordLogArea;
 	private JButton startButton;
@@ -84,6 +87,7 @@ public class DiscordMain extends Thread {
 						if (startButton.isEnabled()) return;
 						String topic = message.getChannel().getTopic();
 						if (topic != null && topic.contains("!read")) return;
+						if (event.getMessage().getAuthor().isBot()) return;
 						try {
 							String content = message.getContent();
 							if (content.equalsIgnoreCase("!join")) {
@@ -104,7 +108,9 @@ public class DiscordMain extends Thread {
 								voiceChannels.remove(channel);
 								channel.leave();
 							}
-							discordSpeech(message.getAuthor().getName(), content);
+							Optional<String> nicknameForGuild = message.getAuthor().getNicknameForGuild(message.getGuild());
+							String nick = nicknameForGuild.isPresent() ? nicknameForGuild.get() : message.getAuthor().getName();
+							discordSpeech(nick, content);
 						} catch (RestApiException e1) {
 							/*
 							try {
@@ -149,8 +155,9 @@ public class DiscordMain extends Thread {
 
 	public void discordSpeech(String sender, String text) throws RestApiException {
 		JTextArea discordLogArea = DiscordMain.getInstance().getDiscordLogArea();
+		text = text.replaceAll("<:(\\w+):\\d+>", "$1");
 		discordLogArea.append(sender + ": " + text);
-		String rep = StudyMain.getInstance().replace(sender, text, !lastUsername.equalsIgnoreCase(sender));
+		String rep = StudyMain.getInstance().getReadingText(sender, text, !lastUsername.equalsIgnoreCase(sender));
 		lastUsername = sender;
 		if (GeneralWindow.getInstance().isDebugMode()) discordLogArea.append("(" + rep + ")");
 		discordLogArea.append("\n");
@@ -158,7 +165,6 @@ public class DiscordMain extends Thread {
 		if (text.startsWith("\\") || text.startsWith("!")) return;
 		if (DiscordSetting.getInstance().getIsSpeakInCallCheckBox().isSelected()) {
 			String convert = SSML.convert("(maki)" + rep);
-			System.out.println(convert);
 			queue.add(Speech.speak(null, convert, true));
 		}
 	}
