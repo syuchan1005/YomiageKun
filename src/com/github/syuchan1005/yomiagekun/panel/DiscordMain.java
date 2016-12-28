@@ -153,14 +153,14 @@ public class DiscordMain extends Thread {
 
 	public void discordSpeech(String sender, String text) throws RestApiException {
 		JTextArea discordLogArea = DiscordMain.getInstance().getDiscordLogArea();
-		text = text.replaceAll("<:(\\w+):\\d+>", "$1");
+		text = text.replaceAll("<:(\\w+):\\d+>", ":$1:");
 		discordLogArea.append(sender + ": " + text);
 		String rep = StudyMain.getInstance().getReadingText(sender, text, !lastUsername.equalsIgnoreCase(sender));
 		lastUsername = sender;
 		if (GeneralWindow.getInstance().isDebugMode()) discordLogArea.append("(" + rep + ")");
 		discordLogArea.append("\n");
 		discordLogArea.setCaretPosition(discordLogArea.getText().length());
-		if (text.startsWith("\\") || text.startsWith("!")) return;
+		if (text.startsWith("\\") || text.startsWith("!") || text.startsWith("`")) return;
 		if (DiscordSetting.getInstance().getIsSpeakInCallCheckBox().isSelected()) {
 			String convert = SSML.convert("(maki)" + rep);
 			queue.add(Speech.speak(null, convert, true));
