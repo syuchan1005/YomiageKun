@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.Pane?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="820.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.syuchan1005.yomiagekun.controllers.LicenseController">
+    <tabs>
+        <Tab text="This Application">
+            <content>
+                <Pane prefHeight="200.0" prefWidth="200.0">
+                    <children>
+                        <TextArea fx:id="thisApplication" editable="false" prefHeight="425.0" prefWidth="810.0" wrapText="true" />
+                    </children>
+                </Pane>
+            </content>
+        </Tab>
+        <Tab text="Libraries">
+            <content>
+                <Pane prefHeight="200.0" prefWidth="200.0">
+                    <children>
+                        <TableView fx:id="tableView" prefHeight="425.0" prefWidth="810.0">
+                            <columns>
+                                <TableColumn fx:id="libraryName" editable="false" prefWidth="403.0" text="LibraryName" />
+                                <TableColumn fx:id="license" editable="false" prefWidth="403.0" text="LICENSE" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </Pane>
+            </content>
+        </Tab>
+        <Tab text="Apache License, Version 2.0">
+            <content>
+                <Pane prefHeight="200.0" prefWidth="200.0">
+                    <children>
+                        <TextArea fx:id="apacheLicense2" editable="false" prefHeight="425.0" prefWidth="810.0" wrapText="true" />
+                    </children>
+                </Pane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>

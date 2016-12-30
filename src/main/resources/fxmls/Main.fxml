@@ -41,6 +41,11 @@
                                 <fx:include source="SDiscord.fxml" fx:id="sDiscord"/>
                             </content>
                         </Tab>
+                        <Tab text="License">
+                            <content>
+                                <fx:include source="License.fxml" fx:id="license"/>
+                            </content>
+                        </Tab>
                     </tabs>
                 </TabPane>
             </content>

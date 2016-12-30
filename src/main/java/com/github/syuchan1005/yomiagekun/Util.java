@@ -6,6 +6,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
@@ -24,5 +32,13 @@ public class Util {
 				consumer.accept(event, event.getTableView().getItems().get(event.getTablePosition().getRow()));
 			}
 		});
+	}
+
+	public static String convertString(InputStream inputStream) {
+		List<String> lines = new ArrayList<>();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+			br.lines().forEach(str -> lines.add(str));
+		} catch(IOException ex) {}
+		return String.join("\n", lines);
 	}
 }

@@ -2,6 +2,7 @@ package com.github.syuchan1005.yomiagekun;
 
 import com.github.syuchan1005.yomiagekun.controllers.DiscordController;
 import com.github.syuchan1005.yomiagekun.controllers.GeneralController;
+import com.github.syuchan1005.yomiagekun.controllers.LicenseController;
 import com.github.syuchan1005.yomiagekun.controllers.SDiscordController;
 import com.github.syuchan1005.yomiagekun.controllers.SSkypeController;
 import com.github.syuchan1005.yomiagekun.controllers.SkypeController;
@@ -33,6 +34,8 @@ public class YomiageKun extends Application implements Initializable {
 	private SSkypeController sSkypeController;
 	@FXML
 	private SDiscordController sDiscordController;
+	@FXML
+	private LicenseController licenseController;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -42,6 +45,7 @@ public class YomiageKun extends Application implements Initializable {
 		generalController.setYomiageKun(this);
 		sSkypeController.setYomiageKun(this);
 		sDiscordController.setYomiageKun(this);
+		licenseController.setYomiageKun(this);
 	}
 
 	public SkypeController getSkypeController() {
@@ -66,6 +70,10 @@ public class YomiageKun extends Application implements Initializable {
 
 	public SDiscordController getsDiscordController() {
 		return sDiscordController;
+	}
+
+	public LicenseController getLicenseController() {
+		return licenseController;
 	}
 
 	@Override
