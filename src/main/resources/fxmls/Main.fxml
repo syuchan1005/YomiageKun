@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0"
+         prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.github.syuchan1005.yomiagekun.YomiageKun">
+    <tabs>
+        <Tab text="Skype">
+            <content>
+                <fx:include source="Skype.fxml" fx:id="skype"/>
+            </content>
+        </Tab>
+        <Tab text="Discord">
+            <content>
+                <fx:include source="Discord.fxml" fx:id="discord"/>
+            </content>
+        </Tab>
+        <Tab text="Study">
+            <content>
+                <fx:include source="Study.fxml" fx:id="study"/>
+            </content>
+        </Tab>
+        <Tab text="Settings">
+            <content>
+                <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab text="General">
+                            <content>
+                                <fx:include source="General.fxml" fx:id="general"/>
+                            </content>
+                        </Tab>
+                        <Tab text="Skype">
+                            <content>
+                                <fx:include source="SSkype.fxml" fx:id="sSkype"/>
+                            </content>
+                        </Tab>
+                        <Tab text="Discord">
+                            <content>
+                                <fx:include source="SDiscord.fxml" fx:id="sDiscord"/>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>
