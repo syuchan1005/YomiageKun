@@ -36,14 +36,9 @@ public class StudyController extends Controller implements Initializable {
 
 	private ObservableList<StudyContext> studyContexts = FXCollections.observableArrayList();
 
-	private ContextMenu contextMenu = new ContextMenu();
-	private MenuItem addItem = new MenuItem("Add");
-	private MenuItem deleteItem = new MenuItem("Delete");
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		tableView.setItems(studyContexts);
-		tableView.setEditable(true);
 
 		Util.<StudyContext, String>setEditTableColumn(beforeColumn, "beforeText",
 				TextFieldTableCell.forTableColumn(), (event, studyContext) -> studyContext.setBeforeText(event.getNewValue()));
@@ -57,22 +52,13 @@ public class StudyController extends Controller implements Initializable {
 		Util.<StudyContext, Boolean>setEditTableColumn(isRegexColumn, "isRegex",
 				CheckBoxTableCell.forTableColumn(isRegexColumn), (event, studyContext) -> studyContext.setRegex(event.getNewValue()));
 
-		addItem.setOnAction(event -> {
+		Util.setContentMenu(tableView, event -> {
 			if (studyContexts.stream().filter(s -> s.getBeforeText().equals("")).count() == 0) {
 				studyContexts.add(new StudyContext("", "", 0, false));
 			}
-		});
-		deleteItem.setOnAction(event -> studyContexts.remove(tableView.getSelectionModel().getSelectedIndex()));
-		contextMenu.getItems().addAll(addItem, deleteItem);
-		tableView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-			switch (event.getButton()) {
-				case PRIMARY:
-					contextMenu.hide();
-					break;
-				case SECONDARY:
-					contextMenu.show(tableView, event.getScreenX(), event.getScreenY());
-					break;
-			}
+		}, event -> {
+			int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+			if (selectedIndex != -1) studyContexts.remove(selectedIndex);
 		});
 	}
 }

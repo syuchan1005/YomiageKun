@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -11,54 +9,46 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0"
-      prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.github.syuchan1005.yomiagekun.controllers.SSkypeController">
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.syuchan1005.yomiagekun.controllers.SSkypeController">
     <children>
-        <VBox>
+        <VBox prefHeight="440.0" prefWidth="800.0">
             <children>
                 <HBox>
                     <children>
                         <Label text="Username">
                             <HBox.margin>
-                                <Insets right="5.0"/>
+                                <Insets right="5.0" />
                             </HBox.margin>
                         </Label>
                         <TextField fx:id="usernameField">
                             <HBox.margin>
-                                <Insets right="5.0"/>
+                                <Insets right="5.0" />
                             </HBox.margin>
                         </TextField>
-                        <CheckBox fx:id="usernameStored" mnemonicParsing="false" text="Stored"/>
+                        <CheckBox fx:id="usernameStored" mnemonicParsing="false" text="Stored" />
                     </children>
                 </HBox>
                 <HBox>
                     <children>
                         <Label text="Password">
                             <HBox.margin>
-                                <Insets right="9.0"/>
+                                <Insets right="9.0" />
                             </HBox.margin>
                         </Label>
                         <TextField fx:id="passwordField">
                             <HBox.margin>
-                                <Insets right="5.0"/>
+                                <Insets right="5.0" />
                             </HBox.margin>
                         </TextField>
-                        <CheckBox fx:id="passwordStored" mnemonicParsing="false" text="Stored"/>
+                        <CheckBox fx:id="passwordStored" mnemonicParsing="false" text="Stored" />
                     </children>
                 </HBox>
-                <Label text="ReadingList"/>
-                <HBox>
-                    <children>
-                        <Button mnemonicParsing="false" text="Add"/>
-                        <TextField fx:id="nameField"/>
-                        <ChoiceBox fx:id="choiceBox" prefWidth="150.0"/>
-                    </children>
-                </HBox>
-                <TableView fx:id="tableView" prefHeight="505.0" prefWidth="800.0">
+                <Label text="ReadingList" />
+                <TableView fx:id="tableView" editable="true" prefHeight="500.0" prefWidth="800.0">
                     <columns>
-                        <TableColumn fx:id="nameColumn" prefWidth="700.0" text="Name"/>
-                        <TableColumn fx:id="targetColumn" minWidth="100.0" prefWidth="75.0" text="Target"/>
+                        <TableColumn fx:id="nameColumn" prefWidth="698.0" text="Name" />
+                        <TableColumn fx:id="targetColumn" minWidth="100.0" prefWidth="75.0" text="Target" />
                     </columns>
                 </TableView>
             </children>
