@@ -4,8 +4,7 @@
 <?import javafx.scene.control.TabPane?>
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0"
          prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111"
-         xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="com.github.syuchan1005.yomiagekun.YomiageKun">
+         xmlns:fx="http://javafx.com/fxml/1">
     <tabs>
         <Tab text="Skype">
             <content>

@@ -9,49 +9,47 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0"
-      prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.github.syuchan1005.yomiagekun.controllers.SDiscordController">
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.syuchan1005.yomiagekun.controllers.SDiscordController">
     <children>
         <VBox spacing="10.0">
             <children>
-                <Label text="Login"/>
+                <Label text="Login" />
                 <HBox spacing="10.0">
                     <children>
-                        <RadioButton fx:id="tokenRadioButton" mnemonicParsing="false" prefWidth="60.0" text="Token">
+                        <RadioButton fx:id="tokenRadioButton" mnemonicParsing="false" prefWidth="60.0" selected="true" text="Token">
                             <toggleGroup>
-                                <ToggleGroup fx:id="discordLogin"/>
+                                <ToggleGroup fx:id="discordLogin" />
                             </toggleGroup>
                         </RadioButton>
-                        <Label prefWidth="60.0" text="Token"/>
-                        <TextField fx:id="tokenField" prefWidth="150.0"/>
-                        <CheckBox fx:id="tokenStored" mnemonicParsing="false" text="Stored"/>
+                        <Label prefWidth="60.0" text="Token" />
+                        <TextField fx:id="tokenField" prefWidth="150.0" />
+                        <CheckBox fx:id="tokenStored" mnemonicParsing="false" text="Stored" />
                     </children>
                 </HBox>
                 <HBox spacing="10.0">
                     <children>
-                        <RadioButton fx:id="emailRadioButton" mnemonicParsing="false" prefWidth="60.0" text="Email"
-                                     toggleGroup="$discordLogin"/>
+                        <RadioButton fx:id="emailRadioButton" mnemonicParsing="false" prefWidth="60.0" text="Email" toggleGroup="$discordLogin" />
                         <VBox fillWidth="false" prefWidth="60.0">
                             <children>
                                 <Label text="Email">
                                     <VBox.margin>
-                                        <Insets/>
+                                        <Insets />
                                     </VBox.margin>
                                 </Label>
-                                <Label text="Password"/>
+                                <Label text="Password" />
                             </children>
                         </VBox>
                         <VBox prefWidth="150.0">
                             <children>
-                                <TextField fx:id="emailField"/>
-                                <TextField fx:id="passwordField"/>
+                                <TextField fx:id="emailField" />
+                                <TextField fx:id="passwordField" />
                             </children>
                         </VBox>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                             <children>
-                                <CheckBox fx:id="emailStored" mnemonicParsing="false" text="Stored"/>
-                                <CheckBox fx:id="passwordStored" mnemonicParsing="false" text="Stored"/>
+                                <CheckBox fx:id="emailStored" mnemonicParsing="false" text="Stored" />
+                                <CheckBox fx:id="passwordStored" mnemonicParsing="false" text="Stored" />
                             </children>
                         </VBox>
                     </children>

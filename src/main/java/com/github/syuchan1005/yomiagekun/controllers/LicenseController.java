@@ -45,7 +45,8 @@ public class LicenseController extends Controller implements Initializable {
 		licenseContents.add(new LicenseContent("httpclient", "Apache License 2.0"));
 		licenseContents.add(new LicenseContent("httpmime", "Apache License 2.0"));
 		licenseContents.add(new LicenseContent("jackson", "Apache License 2.0"));
-		licenseContents.add(new LicenseContent("logback", "LGPL 2.1 & EPL 1.0"));
+		licenseContents.add(new LicenseContent("logback", "LGPL 2.1 & EPL 1.0 License"));
+		licenseContents.add(new LicenseContent("sqlite", "Apache License 2.0"));
 		apacheLicense2.setText(Util.convertString(ClassLoader.getSystemResourceAsStream("ApacheLicense2")));
 	}
 }

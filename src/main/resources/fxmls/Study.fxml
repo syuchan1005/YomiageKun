@@ -11,10 +11,10 @@
             <children>
                 <TableView fx:id="tableView" editable="true" prefHeight="465.0" prefWidth="800.0">
                     <columns>
-                        <TableColumn fx:id="beforeColumn" prefWidth="350.0" text="BeforeText" />
-                        <TableColumn fx:id="afterColumn" prefWidth="350.0" text="AfterText" />
-                        <TableColumn fx:id="priorityColumn" prefWidth="49.0" text="Priority" />
-                        <TableColumn fx:id="isRegexColumn" prefWidth="49.0" text="isRegex" />
+                        <TableColumn fx:id="beforeColumn" prefWidth="350.0" sortable="false" text="BeforeText" />
+                        <TableColumn fx:id="afterColumn" prefWidth="350.0" sortable="false" text="AfterText" />
+                        <TableColumn fx:id="priorityColumn" prefWidth="49.0" sortable="false" text="Priority" />
+                        <TableColumn fx:id="isRegexColumn" prefWidth="49.0" sortable="false" text="isRegex" />
                     </columns>
                 </TableView>
             </children>

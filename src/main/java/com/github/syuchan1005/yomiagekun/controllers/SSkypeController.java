@@ -1,6 +1,7 @@
 package com.github.syuchan1005.yomiagekun.controllers;
 
 import com.github.syuchan1005.yomiagekun.Controller;
+import com.github.syuchan1005.yomiagekun.SQLiteConnector;
 import com.github.syuchan1005.yomiagekun.Util;
 import com.github.syuchan1005.yomiagekun.contents.SkypeContent;
 import javafx.collections.FXCollections;
@@ -13,8 +14,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.WindowEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,10 +32,7 @@ public class SSkypeController extends Controller implements Initializable {
 	private TextField passwordField;
 	@FXML
 	private CheckBox passwordStored;
-	@FXML
-	private TextField nameField;
-	@FXML
-	private ChoiceBox choiceBox;
+
 	@FXML
 	private TableView tableView;
 	@FXML
@@ -61,5 +59,11 @@ public class SSkypeController extends Controller implements Initializable {
 			int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
 			if (selectedIndex != -1) skypeContents.remove(selectedIndex);
 		});
+	}
+
+	@Override
+	public void onClose(WindowEvent event) {
+		SQLiteConnector.setSaveData("skypeUserName", usernameStored.isSelected() ? usernameField.getText() : "");
+		SQLiteConnector.setSaveData("skypePassword", passwordStored.isSelected() ? passwordField.getText() : "");
 	}
 }

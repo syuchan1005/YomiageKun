@@ -3,7 +3,6 @@ modules
 out
 src/META-INF
 *.properties
-discord.txt
-skype.txt
-study.txt
+*.txt
 *.iml
+*.db

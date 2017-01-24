@@ -1,6 +1,7 @@
 package com.github.syuchan1005.yomiagekun.players;
 
 import sx.blah.discord.handle.obj.IVoiceChannel;
+import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.audio.AudioPlayer;
 
 import javax.sound.sampled.AudioFormat;
@@ -38,10 +39,16 @@ public class DiscordAudioPlayer extends Thread {
 	}
 
 	public void addVoiceChannel(IVoiceChannel voiceChannel) {
+		try {
+			voiceChannel.join();
+		} catch (MissingPermissionsException e) {
+			e.printStackTrace();
+		}
 		voiceChannels.add(voiceChannel);
 	}
 
 	public void deleteVoiceChannel(IVoiceChannel voiceChannel) {
+		voiceChannel.leave();
 		voiceChannels.remove(voiceChannel);
 	}
 
